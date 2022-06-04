@@ -6,6 +6,12 @@ namespace Shared
 {
     public static class ServiceExtensions
     {
+        public static IServiceCollection AddNotificationHandler(this IServiceCollection services)
+        {
+            services.AddScoped<INotificationHandler, NotificationHandler>();
+
+            return services;
+        }
         public static IServiceCollection AddDatabaseContext<TContext>(this IServiceCollection services, string connectionString) where TContext : DbContext
         {
             services.AddDbContext<TContext>(options =>
