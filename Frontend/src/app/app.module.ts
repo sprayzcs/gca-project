@@ -18,10 +18,11 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { CartComponent } from './routes/cart/cart.component';
 import { HomeComponent } from './routes/home/home.component';
 import { ProductCardComponent } from './routes/home/components/product-card/product-card.component';
-import { ItemListComponent } from './routes/cart/components/item-list/item-list.component';
+import { ItemListComponent } from './shared-components/item-list/item-list.component';
 import { ContactFormComponent } from './routes/cart/components/contact-form/contact-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ReactiveValidationModule } from 'angular-reactive-validation';
+import { ConfirmationComponent } from './routes/confirmation/confirmation.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ReactiveValidationModule } from 'angular-reactive-validation';
     HomeComponent,
     ProductCardComponent,
     ItemListComponent,
-    ContactFormComponent
+    ContactFormComponent,
+    ConfirmationComponent
   ],
   imports: [
     BrowserModule,
