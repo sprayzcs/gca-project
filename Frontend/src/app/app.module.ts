@@ -4,18 +4,20 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { NbActionsModule, NbButtonModule, NbCardModule, NbIconModule, NbLayoutModule, NbTagModule, NbThemeModule } from '@nebular/theme';
+import { NbActionsModule, NbButtonModule, NbCardModule, NbIconModule, NbLayoutModule, NbListModule, NbTagModule, NbThemeModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { CartComponent } from './routes/cart/cart.component';
 import { HomeComponent } from './routes/home/home.component';
 import { ProductCardComponent } from './routes/home/components/product-card/product-card.component';
+import { ItemListComponent } from './routes/cart/components/item-list/item-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CartComponent,
     HomeComponent,
-    ProductCardComponent
+    ProductCardComponent,
+    ItemListComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +29,8 @@ import { ProductCardComponent } from './routes/home/components/product-card/prod
     NbTagModule,
     NbIconModule,
     NbCardModule,
-    NbButtonModule
+    NbButtonModule,
+    NbListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
