@@ -1,0 +1,14 @@
+.header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+
+    img {
+        max-height: 40px;
+        cursor: pointer;
+    }
+
+    nb-actions {
+        cursor: pointer;
+    }
+}
