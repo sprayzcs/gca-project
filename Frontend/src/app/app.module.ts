@@ -4,12 +4,24 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { NbActionsModule, NbButtonModule, NbCardModule, NbIconModule, NbLayoutModule, NbListModule, NbTagModule, NbThemeModule } from '@nebular/theme';
+import { NbActionsModule,
+  NbButtonModule,
+  NbCardModule,
+  NbIconModule,
+  NbInputModule,
+  NbLayoutModule,
+  NbListModule,
+  NbSelectModule,
+  NbTagModule,
+  NbThemeModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { CartComponent } from './routes/cart/cart.component';
 import { HomeComponent } from './routes/home/home.component';
 import { ProductCardComponent } from './routes/home/components/product-card/product-card.component';
 import { ItemListComponent } from './routes/cart/components/item-list/item-list.component';
+import { ContactFormComponent } from './routes/cart/components/contact-form/contact-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveValidationModule } from 'angular-reactive-validation';
 
 @NgModule({
   declarations: [
@@ -17,11 +29,14 @@ import { ItemListComponent } from './routes/cart/components/item-list/item-list.
     CartComponent,
     HomeComponent,
     ProductCardComponent,
-    ItemListComponent
+    ItemListComponent,
+    ContactFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule,
+    ReactiveValidationModule,
     NbThemeModule.forRoot({name: 'light'}),
     NbEvaIconsModule,
     NbLayoutModule,
@@ -30,7 +45,9 @@ import { ItemListComponent } from './routes/cart/components/item-list/item-list.
     NbIconModule,
     NbCardModule,
     NbButtonModule,
-    NbListModule
+    NbListModule,
+    NbInputModule,
+    NbSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

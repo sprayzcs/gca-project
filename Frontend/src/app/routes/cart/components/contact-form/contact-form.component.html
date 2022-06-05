@@ -1,0 +1,46 @@
+<div [formGroup]="formGroup">
+    <div>
+        <h4>Kontakt</h4>
+        <input nbInput placeholder="E-Mail" formControlName="email" fullWidth />
+        <arv-validation-message for="email"></arv-validation-message>
+    </div>
+
+    <div formGroupName="contact" class="formGroup">
+        <h4>Adresse</h4>
+        <input nbInput placeholder="Straße, Hausnummer" formControlName="street" fullWidth />
+        <div class="city-zipcode">
+            <input nbInput placeholder="Stadt" formControlName="city" fullWidth />
+            <input nbInput placeholder="Postleitzahl" formControlName="zipCode" fullWidth />
+        </div>
+        <input nbInput placeholder="Land" formControlName="country" fullWidth />
+        <arv-validation-messages [for]="['street', 'city', 'zipCode', 'country']"></arv-validation-messages>
+    </div>
+
+    <div formGroupName="payment" class="formGroup">
+        <h4>Zahlung</h4>
+        <input nbInput placeholder="Kreditkartennummer" formControlName="creditCardNumber" fullWidth />
+        <div class="month-year-cvv">
+            <nb-select placeholder="Monat" formControlName="month" fullWidth>
+                <nb-option value="0">Januar</nb-option>
+                <nb-option value="1">Februar</nb-option>
+                <nb-option value="2">März</nb-option>
+                <nb-option value="3">April</nb-option>
+                <nb-option value="4">Mai</nb-option>
+                <nb-option value="5">Juni</nb-option>
+                <nb-option value="6">Juli</nb-option>
+                <nb-option value="7">August</nb-option>
+                <nb-option value="8">September</nb-option>
+                <nb-option value="9">Oktober</nb-option>
+                <nb-option value="10">November</nb-option>
+                <nb-option value="11">Dezember</nb-option>
+            </nb-select>
+            <nb-select placeholder="Jahr" formControlName="year" fullWidth>
+                <nb-option *ngFor="let _ of [].constructor(4); let i = index;" [value]="i + currentYear">
+                    {{i + currentYear}}
+                </nb-option>
+            </nb-select>
+            <input nbInput placeholder="CVV" formControlName="cvv" fullWidth type="number" />
+        </div>
+        <arv-validation-messages [for]="['creditCardNumber', 'month', 'year', 'cvv']"></arv-validation-messages>
+    </div>
+</div>
