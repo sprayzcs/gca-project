@@ -1,8 +1,13 @@
 .wrapper {
     width: 60%;
     margin: 0 auto;
-
+    
     button {
         float: right;
+    }
+}
+@media only screen and (max-width: 800px) {
+    .wrapper {
+        width: 90%;
     }
 }
