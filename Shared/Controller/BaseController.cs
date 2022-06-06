@@ -11,8 +11,8 @@ public class BaseController : ControllerBase
     {
         _notificationHandler = notificationHandler;
     }
-    
-    public IActionResult Result(object? @object)
+
+    protected IActionResult Result(object? @object)
     {
         if (_notificationHandler.HasInsufficientPermissions())
         {
