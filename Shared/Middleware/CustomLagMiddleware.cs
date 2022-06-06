@@ -13,8 +13,8 @@ namespace Shared.Middleware
 {
     internal class CustomLagMiddleware
     {
-        private static readonly TimeSpan MIN_LAG = TimeSpan.FromMilliseconds(100);
-        private static readonly TimeSpan MAX_LAG = TimeSpan.FromSeconds(10);
+        private static readonly TimeSpan MinLag = TimeSpan.FromMilliseconds(100);
+        private static readonly TimeSpan MaxLag = TimeSpan.FromSeconds(10);
 
         private readonly RequestDelegate _next;
         private readonly ILogger<CustomLagMiddleware> _logger;
@@ -36,7 +36,7 @@ namespace Shared.Middleware
 
         private static TimeSpan GetCustomLagTime()
         {
-            return TimeSpan.FromMilliseconds(RandomNumberGenerator.GetInt32((int)MIN_LAG.TotalMilliseconds, (int)MAX_LAG.TotalMilliseconds));
+            return TimeSpan.FromMilliseconds(RandomNumberGenerator.GetInt32((int)MinLag.TotalMilliseconds, (int)MaxLag.TotalMilliseconds));
         }
     }
 }
