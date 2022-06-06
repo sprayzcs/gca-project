@@ -4,7 +4,7 @@ using Shared.Controller;
 
 namespace CatalogService.Controllers;
 
-[Route("{controller}/")]
+[Route("[controller]/[action]")]
 public class TestController : BaseController
 {
     private readonly INotificationHandler _notificationHandler;
