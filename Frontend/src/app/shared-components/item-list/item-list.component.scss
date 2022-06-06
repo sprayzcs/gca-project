@@ -1,0 +1,46 @@
+@use '../../../themes.scss' as *;
+
+table {
+    width: 100%;
+
+    td {
+        border-bottom: 1px nb-theme(border-basic-color-4) solid;
+        border-collapse: collapse;
+    }
+
+    .header {
+        .price {
+            text-align: right;
+        }
+    }
+
+    .product {
+        height: 50px;
+
+        .image {
+            width: 80px;
+
+            img {
+                height: 40px;
+            }
+        }
+
+        .price {
+            width: 10%;
+            text-align: right;
+        }
+    }
+
+    .footer {
+        height: 50px;
+
+        td {
+            border-bottom: none;
+        }
+
+
+        .price {
+            text-align: right;
+        }
+    }
+}
