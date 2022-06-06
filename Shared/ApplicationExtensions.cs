@@ -6,13 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared
+namespace Shared;
+
+public static class ApplicationExtensions
 {
-    public static class ApplicationExtensions
+    public static void UseCustomLag(this IApplicationBuilder app)
     {
-        public static void UseCustomLag(this IApplicationBuilder app)
-        {
-            app.UseMiddleware<CustomLagMiddleware>();
-        }
+        app.UseMiddleware<CustomLagMiddleware>();
     }
 }
