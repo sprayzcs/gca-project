@@ -5,14 +5,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Shared
 {
     public static class ApplicationExtensions
     {
-        public static void UseCustomLag(this IApplicationBuilder app)
+        public static void UseCustomLag(this IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseMiddleware<CustomLagMiddleware>();
+            if (!env.IsDevelopment())
+            {
+                app.UseMiddleware<CustomLagMiddleware>();
+            }
         }
     }
 }
