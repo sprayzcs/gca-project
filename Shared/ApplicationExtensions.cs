@@ -11,9 +11,9 @@ namespace Shared
 {
     public static class ApplicationExtensions
     {
-        public static void UseCustomLag(this IApplicationBuilder app, IHostingEnvironment env)
+        public static void UseCustomLag(this IApplicationBuilder app, bool enabled)
         {
-            if (!env.IsDevelopment())
+            if (enabled)
             {
                 app.UseMiddleware<CustomLagMiddleware>();
             }
