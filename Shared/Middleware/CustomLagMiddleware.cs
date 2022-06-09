@@ -9,34 +9,33 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Middleware
+namespace Shared.Middleware;
+
+internal class CustomLagMiddleware
 {
-    internal class CustomLagMiddleware
+    private static readonly TimeSpan MinLag = TimeSpan.FromMilliseconds(100);
+    private static readonly TimeSpan MaxLag = TimeSpan.FromSeconds(10);
+
+    private readonly RequestDelegate _next;
+    private readonly ILogger<CustomLagMiddleware> _logger;
+
+    public CustomLagMiddleware(RequestDelegate next, ILogger<CustomLagMiddleware> logger)
     {
-        private static readonly TimeSpan MinLag = TimeSpan.FromMilliseconds(100);
-        private static readonly TimeSpan MaxLag = TimeSpan.FromSeconds(10);
+        _next = next;
+        _logger = logger;
+    }
 
-        private readonly RequestDelegate _next;
-        private readonly ILogger<CustomLagMiddleware> _logger;
+    public async Task InvokeAsync(HttpContext httpContext)
+    {
+        TimeSpan delay = GetCustomLagTime();
+        _logger.LogDebug("Delaying request '{id}' to '{path}' by '{delay}' milliseconds", httpContext.TraceIdentifier, httpContext.Request.Path, delay.TotalMilliseconds);
 
-        public CustomLagMiddleware(RequestDelegate next, ILogger<CustomLagMiddleware> logger)
-        {
-            _next = next;
-            _logger = logger;
-        }
+        await Task.Delay(delay);
+        await _next(httpContext);
+    }
 
-        public async Task InvokeAsync(HttpContext httpContext)
-        {
-            TimeSpan delay = GetCustomLagTime();
-            _logger.LogDebug("Delaying request '{id}' to '{path}' by '{delay}' milliseconds", httpContext.TraceIdentifier, httpContext.Request.Path, delay.TotalMilliseconds);
-
-            await Task.Delay(delay);
-            await _next(httpContext);
-        }
-
-        private static TimeSpan GetCustomLagTime()
-        {
-            return TimeSpan.FromMilliseconds(RandomNumberGenerator.GetInt32((int)MinLag.TotalMilliseconds, (int)MaxLag.TotalMilliseconds));
-        }
+    private static TimeSpan GetCustomLagTime()
+    {
+        return TimeSpan.FromMilliseconds(RandomNumberGenerator.GetInt32((int)MinLag.TotalMilliseconds, (int)MaxLag.TotalMilliseconds));
     }
 }

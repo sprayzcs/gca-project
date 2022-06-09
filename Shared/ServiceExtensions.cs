@@ -2,52 +2,51 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Shared
+namespace Shared;
+
+public static class ServiceExtensions
 {
-    public static class ServiceExtensions
+    public static IServiceCollection AddNotificationHandler(this IServiceCollection services)
     {
-        public static IServiceCollection AddNotificationHandler(this IServiceCollection services)
+        services.AddScoped<INotificationHandler, NotificationHandler>();
+
+        return services;
+    }
+    public static IServiceCollection AddDatabaseContext<TContext>(this IServiceCollection services, string connectionString) where TContext : DbContext
+    {
+        services.AddDbContext<TContext>(options =>
         {
-            services.AddScoped<INotificationHandler, NotificationHandler>();
+            options.UseNpgsql(connectionString, npgsqlOptions =>
+            {
+                npgsqlOptions.EnableRetryOnFailure();
+            });
+        });
 
-            return services;
-        }
-        public static IServiceCollection AddDatabaseContext<TContext>(this IServiceCollection services, string connectionString) where TContext : DbContext
+        return services;
+    }
+
+    public static IServiceCollection AddHttpClients(this IServiceCollection services, IConfiguration serviceConfiguration)
+    {
+        services.AddHttpClient("cart", client =>
         {
-            services.AddDbContext<TContext>(options =>
-            {
-                options.UseNpgsql(connectionString, npgsqlOptions =>
-                {
-                    npgsqlOptions.EnableRetryOnFailure();
-                });
-            });
+            client.BaseAddress = new Uri(serviceConfiguration["Cart"]);
+        });
 
-            return services;
-        }
-
-        public static IServiceCollection AddHttpClients(this IServiceCollection services, IConfiguration serviceConfiguration)
+        services.AddHttpClient("shipping", client =>
         {
-            services.AddHttpClient("cart", client =>
-            {
-                client.BaseAddress = new Uri(serviceConfiguration["Cart"]);
-            });
+            client.BaseAddress = new Uri(serviceConfiguration["Shipping"]);
+        });
 
-            services.AddHttpClient("shipping", client =>
-            {
-                client.BaseAddress = new Uri(serviceConfiguration["Shipping"]);
-            });
+        services.AddHttpClient("checkout", client =>
+        {
+            client.BaseAddress = new Uri(serviceConfiguration["Checkout"]);
+        });
 
-            services.AddHttpClient("checkout", client =>
-            {
-                client.BaseAddress = new Uri(serviceConfiguration["Checkout"]);
-            });
+        services.AddHttpClient("catalog", client =>
+        {
+            client.BaseAddress = new Uri(serviceConfiguration["Catalog"]);
+        });
 
-            services.AddHttpClient("catalog", client =>
-            {
-                client.BaseAddress = new Uri(serviceConfiguration["Catalog"]);
-            });
-
-            return services;
-        }
+        return services;
     }
 }
