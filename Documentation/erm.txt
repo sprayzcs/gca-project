@@ -1,0 +1,35 @@
+Product
+-
+ID PK uuid
+Name string
+Price int
+
+Cart
+-
+ID PK uuid
+SessionID string
+Active boolean
+
+CartProducts
+-
+ID PK uuid
+CartID uuid FK >- Cart.ID
+ProductID uuid FK >- Product.ID
+
+Order
+-
+ID PK uuid
+Date date
+Country string
+City string
+Zipcode string
+Street string
+CartID uuid FK >- Cart.ID
+CreditCardNumber string
+CreditCardCCV string
+CreditCardExpiryDate date
+
+Shipment
+-
+ID PK uuid
+OrderID FK >- Order.ID
