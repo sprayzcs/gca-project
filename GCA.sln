@@ -9,16 +9,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csp
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Frontend", "Frontend\Frontend.esproj", "{B62D715A-FFB0-41CD-AD13-A60F3E5F6149}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4E0D5D7A-0D3D-4830-B7A7-C4693FB17D77}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{4E0D5D7A-0D3D-4830-B7A7-C4693FB17D77}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartService", "CartService\CartService.csproj", "{F5D358D1-6375-48E6-8B4A-E2A94752DE7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CartService", "CartService\CartService.csproj", "{F5D358D1-6375-48E6-8B4A-E2A94752DE7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckoutService", "CheckoutService\CheckoutService.csproj", "{DA48D688-427C-4488-8D83-1BAC083A7FBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckoutService", "CheckoutService\CheckoutService.csproj", "{DA48D688-427C-4488-8D83-1BAC083A7FBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShippingService", "ShippingService\ShippingService.csproj", "{E5A72CE1-C86B-4C21-A7F7-C8DD4CDC57E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShippingService", "ShippingService\ShippingService.csproj", "{E5A72CE1-C86B-4C21-A7F7-C8DD4CDC57E5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{8C8655B5-E539-4B31-A4F1-EB4A553224F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{449A573B-DF76-4AB2-B2FE-2E29313A030E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +59,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5DE7387C-76C8-4D21-BF72-2CCD33416570} = {449A573B-DF76-4AB2-B2FE-2E29313A030E}
+		{948F7621-8599-42FE-81DF-F36FC5D1EF01} = {8C8655B5-E539-4B31-A4F1-EB4A553224F4}
+		{F5D358D1-6375-48E6-8B4A-E2A94752DE7A} = {449A573B-DF76-4AB2-B2FE-2E29313A030E}
+		{DA48D688-427C-4488-8D83-1BAC083A7FBB} = {449A573B-DF76-4AB2-B2FE-2E29313A030E}
+		{E5A72CE1-C86B-4C21-A7F7-C8DD4CDC57E5} = {449A573B-DF76-4AB2-B2FE-2E29313A030E}
+		{449A573B-DF76-4AB2-B2FE-2E29313A030E} = {8C8655B5-E539-4B31-A4F1-EB4A553224F4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {68B9C0C9-3625-4B52-818F-3708D81B73F8}
