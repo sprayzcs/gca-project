@@ -1,0 +1,28 @@
+version: '3.4'
+
+volumes:
+  db-data:
+  log-data:
+
+services:
+  log:
+    image: datalust/seq
+    ports:
+      - 5341:5341
+      - 4000:80
+    environment:
+      - ACCEPT_EULA=Y
+    volumes:
+      - log-data:/data
+  
+  db:
+    image: postgres:14
+    ports:
+      - 5432:5432
+    environment:
+      - PGDATA=/data
+      - POSTGRES_USER=database
+      - POSTGRES_PASSWORD=database
+      - POSTGRES_DB=database
+    volumes:
+      - db-data:/data
