@@ -26,7 +26,10 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.UseCustomLag();
+if (!builder.Environment.IsDevelopment())
+{
+    app.UseCustomLag();
+}
 
 app.MapControllers();
 
