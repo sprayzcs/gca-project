@@ -26,5 +26,5 @@ public class OrderDto
 
     public Guid CardId { get; set; }
 
-    public Guid ShipmentId { get; set; }
+    public Guid? ShipmentId { get; set; }
 }
