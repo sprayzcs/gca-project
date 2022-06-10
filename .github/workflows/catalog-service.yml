@@ -1,0 +1,39 @@
+name: 'Build and push catalog service docker image'
+on:
+  push:
+    paths:
+      - 'Backend/Services/CatalogService/**'
+      - 'Backend/Shared/**'
+
+jobs:
+  build-push-catalog:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      -
+        name: Set up environment
+        run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      -
+        name: Build and push catalog
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Backend/Services/CatalogService/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_IMAGE_CATALOG }}:latest,${{ secrets.DOCKER_IMAGE_CATALOG }}:${{ env.BRANCH }}
+          build-args: |
+            BRANCH=${{ env.BRANCH }}
