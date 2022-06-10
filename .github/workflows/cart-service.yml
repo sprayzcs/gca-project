@@ -4,6 +4,7 @@ on:
     paths:
       - 'Backend/Services/CartService/**'
       - 'Backend/Shared/**'
+  workflow_dispatch:
 
 jobs:
   build-push-cart:

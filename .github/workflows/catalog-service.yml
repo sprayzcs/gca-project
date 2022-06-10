@@ -4,6 +4,7 @@ on:
     paths:
       - 'Backend/Services/CatalogService/**'
       - 'Backend/Shared/**'
+  workflow_dispatch:
 
 jobs:
   build-push-catalog:

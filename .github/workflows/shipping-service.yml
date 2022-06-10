@@ -4,6 +4,7 @@ on:
     paths:
       - 'Backend/Services/ShippingService/**'
       - 'Backend/Shared/**'
+  workflow_dispatch:
 
 jobs:
   build-push-shippinh:
