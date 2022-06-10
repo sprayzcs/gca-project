@@ -19,7 +19,7 @@ Einfach den "Code" einfügen und sich das Diagram frisch generieren lassen.
 
 | Component | Link |
 | --------- | ---- |
-| Frontend | [lennartkampshoff/gca-catalog](https://hub.docker.com/r/lennartkampshoff/gca-frontend) |
+| Frontend | [lennartkampshoff/gca-frontend](https://hub.docker.com/r/lennartkampshoff/gca-frontend) |
 | Catalog Service | [lennartkampshoff/gca-catalog](https://hub.docker.com/r/lennartkampshoff/gca-catalog) |
 | Shipping Service | [lennartkampshoff/gca-shipping](https://hub.docker.com/r/lennartkampshoff/gca-shipping) |
 | Cart Service | [lennartkampshoff/gca-cart](https://hub.docker.com/r/lennartkampshoff/gca-cart) |
