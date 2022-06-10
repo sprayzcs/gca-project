@@ -4,6 +4,7 @@ on:
     paths:
       - 'Backend/Services/CheckoutService/**'
       - 'Backend/Shared/**'
+  workflow_dispatch:
 
 jobs:
   build-push-Checkout:
