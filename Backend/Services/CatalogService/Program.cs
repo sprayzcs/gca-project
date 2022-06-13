@@ -1,4 +1,9 @@
-﻿using Shared;
+﻿using CatalogService.Data;
+using CatalogService.Infrastructure;
+using CatalogService.Model;
+using CatalogService.Services;
+using Shared;
+using Shared.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,11 +14,22 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDatabaseContext<CatalogContext>(builder.Configuration["ConnectionString"]);
 builder.Services.AddNotificationHandler();
 builder.Services.AddHttpClients(builder.Configuration.GetSection("Services"));
 builder.Logging.AddSeq(builder.Configuration["Seq"]);
 
+builder.Services.AddAutoMapper(config =>
+{
+    config.CreateMap<Product, ProductDto>();
+}, typeof(Product), typeof(ProductDto));
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+
 var app = builder.Build();
+
+await app.MigrateDbContext<CatalogContext>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -25,6 +41,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseStaticFiles(new StaticFileOptions());
 
 if (!builder.Environment.IsDevelopment())
 {
