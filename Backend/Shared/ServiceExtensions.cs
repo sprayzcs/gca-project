@@ -22,6 +22,8 @@ public static class ServiceExtensions
             });
         });
 
+        services.AddScoped<DbContext, TContext>();
+
         return services;
     }
 
