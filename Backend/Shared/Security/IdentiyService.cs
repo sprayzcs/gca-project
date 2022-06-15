@@ -45,6 +45,11 @@ public class IdentiyService : IIdentityService
 
     public bool ValidateIdentityToken(string identityToken, out string serviceName)
     {
+        if (identityToken.StartsWith("Bearer"))
+        {
+            identityToken = identityToken[7..];
+        }
+        
         var tokenHandler = new JwtSecurityTokenHandler();
         try
         {
@@ -53,6 +58,7 @@ public class IdentiyService : IIdentityService
                 ValidateIssuer = true,
                 ValidateIssuerSigningKey = true,
                 ValidateAudience = false,
+                RequireExpirationTime = false,
                 ValidIssuer = _issuer,
                 IssuerSigningKey = _securityKey
             }, out var validatedToken);
@@ -65,8 +71,7 @@ public class IdentiyService : IIdentityService
             }
 
             serviceName = serviceClaim.Value;
-            return _securityInfo.ValidAccessors.Any(accessor => accessor == serviceClaim.Value);
-
+            return _securityInfo.ValidAccessors.Any(accessor => accessor == serviceClaim.Value) || _securityInfo.Self == serviceName;
         }
         catch
         {

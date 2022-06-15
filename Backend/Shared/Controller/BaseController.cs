@@ -16,7 +16,8 @@ public class BaseController : ControllerBase
     {
         if (_notificationHandler.HasInsufficientPermissions())
         {
-            return Forbid();
+            // Cannot use 'Forbid' as it would use the asp.net authentication system
+            return StatusCode(403);
         }
 
         if (_notificationHandler.HasObjectNotFound())

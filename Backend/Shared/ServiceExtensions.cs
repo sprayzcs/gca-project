@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Security;
+using Shared.Security.Model;
 
 namespace Shared;
 
@@ -48,6 +51,19 @@ public static class ServiceExtensions
         {
             client.BaseAddress = new Uri(serviceConfiguration["Catalog"]);
         });
+
+        return services;
+    }
+    
+    public static IServiceCollection AddSecurityServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        var securityInfo = new SecurityInfoModel();
+        configuration.Bind("Security", securityInfo);
+        services.AddSingleton(securityInfo);
+
+        services.AddSingleton<IIdentityService, IdentiyService>();
+        services.AddScoped<IdentityModel>();
+        services.AddScoped<ISecuredMethodService, SecuredMethodService>();
 
         return services;
     }

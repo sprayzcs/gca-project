@@ -15,7 +15,7 @@ public class IdentityMiddleware
     // If no or an invalid token was provided, the service can still be used. But some endpoints can be closed down
     public async Task InvokeAsync(HttpContext context, IIdentityService identityService, IdentityModel identity)
     {
-        if (!context.Request.Headers.TryGetValue("Authentication", out var token))
+        if (!context.Request.Headers.TryGetValue("Authorization", out var token))
         {
             await _next(context);
             return;
