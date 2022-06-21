@@ -16,8 +16,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDatabaseContext<CatalogContext>(builder.Configuration["ConnectionString"]);
 builder.Services.AddNotificationHandler();
-builder.Services.AddHttpClients(builder.Configuration.GetSection("Services"));
 builder.Services.AddSecurityServices(builder.Configuration);
+builder.Services.AddHttpClients(builder.Configuration.GetSection("Services"));
 builder.Logging.AddSeq(builder.Configuration["Seq"]);
 
 builder.Services.AddAutoMapper(config =>

@@ -2,6 +2,6 @@
 
 public interface IIdentityService
 {
-    string CreateIdentityToken(string forIdentity);
+    string CreateIdentityToken();
     bool ValidateIdentityToken(string identityToken, out string serviceName);
 }

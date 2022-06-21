@@ -8,34 +8,31 @@ using Shared.Security.Model;
 namespace Shared.Security;
 
 // primitive way of doing it, should be replaced by an authenticated service of some extend
-public class IdentiyService : IIdentityService
+public class IdentityService : IIdentityService
 {
-    private const string _issuer = "https://authentication-service";
-    private const string _claim = "forService";
+    private const string Issuer = "https://authentication-service";
+    private const string Claim = "forService";
 
-    private readonly IConfiguration _configuration;
     private readonly SecurityInfoModel _securityInfo;
     private readonly SymmetricSecurityKey _securityKey;
 
-    public IdentiyService(IConfiguration configuration, SecurityInfoModel securityInfo)
+    public IdentityService(SecurityInfoModel securityInfo)
     {
-        _configuration = configuration;
         _securityInfo = securityInfo;
-
         _securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityInfo.Secret));
     }
 
     // token does not expire as of now
-    public string CreateIdentityToken(string forIdentity)
+    public string CreateIdentityToken()
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Expires = DateTime.MaxValue,
-            Issuer = _issuer,
+            Issuer = Issuer,
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim(_claim, forIdentity)
+                new Claim(Claim, _securityInfo.Self)
             }),
             SigningCredentials = new SigningCredentials(_securityKey, SecurityAlgorithms.HmacSha256Signature)
         };
@@ -59,11 +56,11 @@ public class IdentiyService : IIdentityService
                 ValidateIssuerSigningKey = true,
                 ValidateAudience = false,
                 RequireExpirationTime = false,
-                ValidIssuer = _issuer,
+                ValidIssuer = Issuer,
                 IssuerSigningKey = _securityKey
             }, out var validatedToken);
 
-            var serviceClaim = claims.FindFirst(_claim);
+            var serviceClaim = claims.FindFirst(Claim);
             if (serviceClaim == null)
             {
                 serviceName = string.Empty;
