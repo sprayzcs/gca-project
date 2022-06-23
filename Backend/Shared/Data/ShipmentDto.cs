@@ -11,4 +11,6 @@ public class ShipmentDto
     public Guid Id { get; set; }
 
     public string TrackingNumber { get; set; } = string.Empty;
+    public bool Fulfilled { get; set; }
+    public int Price { get; set; }
 }
