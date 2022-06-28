@@ -53,7 +53,7 @@ public class ShippingService : IShippingService
             shippingPrice = 1000;
         }
 
-        var shipmentNumber = _generateShipmentNumber();
+        var shipmentNumber = GenerateShipmentNumber();
         var shipment = new Shipment(Guid.NewGuid(), orderId, shipmentNumber, shippingPrice);
         await _shippingRepository.AddAsync(shipment);
 
@@ -77,7 +77,7 @@ public class ShippingService : IShippingService
         return _mapper.Map<ShipmentDto>(shipment);
     }
 
-    private string _generateShipmentNumber()
+    private static string GenerateShipmentNumber()
     {
         const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder builder = new();
