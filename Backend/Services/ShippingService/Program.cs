@@ -1,4 +1,9 @@
 ﻿using Shared;
+using Shared.Data;
+using ShippingService.Data;
+using ShippingService.Infrastructure;
+using ShippingService.Models;
+using ShippingService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,11 +15,22 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddNotificationHandler();
+builder.Services.AddDatabaseContext<ShipmentContext>(builder.Configuration["ConnectionString"]);
 builder.Services.AddSecurityServices(builder.Configuration);
 builder.Services.AddHttpClients(builder.Configuration.GetSection("Services"));
 builder.Logging.AddSeq(builder.Configuration["Seq"]);
 
+builder.Services.AddAutoMapper(config =>
+{
+    config.CreateMap<Shipment, ShipmentDto>();
+}, typeof(Shipment), typeof(ShipmentDto));
+
+builder.Services.AddScoped<IShippingService, ShippingService.Services.ShippingService>();
+builder.Services.AddScoped<IShippingRepository, ShippingRepository>();
+
 var app = builder.Build();
+
+await app.MigrateDbContext<ShipmentContext>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -27,6 +43,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.AddIdentityMiddleware();
 if (!builder.Environment.IsDevelopment())
 {
     app.UseCustomLag();

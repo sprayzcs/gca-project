@@ -3,6 +3,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Infrastructure;
 using Shared.Security;
 using Shared.Security.Model;
 
@@ -27,6 +28,7 @@ public static class ServiceExtensions
         });
 
         services.AddScoped<DbContext, TContext>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }
