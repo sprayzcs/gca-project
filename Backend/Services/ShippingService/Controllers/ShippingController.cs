@@ -18,11 +18,11 @@ public class ShippingController : BaseController
         _shippingService = shippingService;
     }
 
-    [HttpGet("{cartId:guid}")]
+    [HttpGet("{orderId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
-    public async Task<IActionResult> GetShipping(Guid cartId)
+    public async Task<IActionResult> GetShipping(Guid orderId)
     {
-        return Result(await _shippingService.GetShipmentByOrderIdAsync(cartId));
+        return Result(await _shippingService.GetShipmentByOrderIdAsync(orderId));
     }
     
     [HttpPost]
