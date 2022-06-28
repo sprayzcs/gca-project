@@ -14,7 +14,7 @@ namespace ShippingService.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CartId = table.Column<Guid>(type: "uuid", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uuid", nullable: false),
                     TrackingNumber = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
                     Price = table.Column<int>(type: "integer", nullable: false),
                     Fulfilled = table.Column<bool>(type: "boolean", nullable: false)

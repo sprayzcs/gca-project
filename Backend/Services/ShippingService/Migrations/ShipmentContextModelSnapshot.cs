@@ -28,11 +28,11 @@ namespace ShippingService.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CartId")
-                        .HasColumnType("uuid");
-
                     b.Property<bool>("Fulfilled")
                         .HasColumnType("boolean");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Price")
                         .HasColumnType("integer");

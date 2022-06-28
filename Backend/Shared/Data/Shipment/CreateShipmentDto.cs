@@ -2,6 +2,6 @@
 
 public class CreateShipmentDto
 {
-    public Guid CartId { get; set; }
+    public Guid OrderId { get; set; }
     public int CartPrice { get; set; }
 }

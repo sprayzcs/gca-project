@@ -32,7 +32,7 @@ public class ShippingService : IShippingService
         _mapper = mapper;
     }
     
-    public async Task<ShipmentDto> CreateShipmentForCartAsync(Guid cartId, int cartPrice)
+    public async Task<ShipmentDto> CreateShipmentForOrderAsync(Guid orderId, int orderPrice)
     {
         if (!_securedMethodService.CanAccess())
         {
@@ -40,7 +40,7 @@ public class ShippingService : IShippingService
             return new();
         }
 
-        var existingShipment = await _shippingRepository.GetByCartIdAsync(cartId);
+        var existingShipment = await _shippingRepository.GetByOrderIdAsync(orderId);
         if (existingShipment != null)
         {
             _notificationHandler.RaiseError(ShippingErrors.ShipmentAlreadyExists);
@@ -48,13 +48,13 @@ public class ShippingService : IShippingService
         }
         
         int shippingPrice = 0;
-        if (cartPrice <= 10000)
+        if (orderPrice <= 10000)
         {
             shippingPrice = 1000;
         }
 
         var shipmentNumber = _generateShipmentNumber();
-        var shipment = new Shipment(Guid.NewGuid(), cartId, shipmentNumber, shippingPrice);
+        var shipment = new Shipment(Guid.NewGuid(), orderId, shipmentNumber, shippingPrice);
         await _shippingRepository.AddAsync(shipment);
 
         if (!await _unitOfWork.CommitAsync())
@@ -65,9 +65,9 @@ public class ShippingService : IShippingService
         return _mapper.Map<ShipmentDto>(shipment);
     }
 
-    public async Task<ShipmentDto> GetShipmentByCartIdAsync(Guid cartId)
+    public async Task<ShipmentDto> GetShipmentByOrderIdAsync(Guid orderId)
     {
-        var shipment = await _shippingRepository.GetByCartIdAsync(cartId);
+        var shipment = await _shippingRepository.GetByOrderIdAsync(orderId);
         if (shipment == null)
         {
             _notificationHandler.RaiseError(GenericErrorCodes.InsufficientPermissions);

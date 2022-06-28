@@ -12,7 +12,7 @@ using ShippingService.Models;
 namespace ShippingService.Migrations
 {
     [DbContext(typeof(ShipmentContext))]
-    [Migration("20220623135815_AddShipmentEntity")]
+    [Migration("20220628124613_AddShipmentEntity")]
     partial class AddShipmentEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,11 +30,11 @@ namespace ShippingService.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CartId")
-                        .HasColumnType("uuid");
-
                     b.Property<bool>("Fulfilled")
                         .HasColumnType("boolean");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Price")
                         .HasColumnType("integer");

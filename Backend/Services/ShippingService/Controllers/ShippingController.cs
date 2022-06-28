@@ -22,14 +22,14 @@ public class ShippingController : BaseController
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
     public async Task<IActionResult> GetShipping(Guid cartId)
     {
-        return Result(await _shippingService.GetShipmentByCartIdAsync(cartId));
+        return Result(await _shippingService.GetShipmentByOrderIdAsync(cartId));
     }
     
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
     public async Task<IActionResult> CreateShipping([FromBody] CreateShipmentDto request)
     {
-        return Result(await _shippingService.CreateShipmentForCartAsync(request.CartId, request.CartPrice));
+        return Result(await _shippingService.CreateShipmentForOrderAsync(request.OrderId, request.CartPrice));
     }
     
 }
