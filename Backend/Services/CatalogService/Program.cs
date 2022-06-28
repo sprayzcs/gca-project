@@ -14,7 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDatabaseContext<CatalogContext>(builder.Configuration["ConnectionString"]);
+builder.Services.AddDatabaseContext<CatalogContext>(builder.Configuration["ConnectionString"], "catalog");
 builder.Services.AddNotificationHandler();
 builder.Services.AddSecurityServices(builder.Configuration);
 builder.Services.AddHttpClients(builder.Configuration.GetSection("Services"));

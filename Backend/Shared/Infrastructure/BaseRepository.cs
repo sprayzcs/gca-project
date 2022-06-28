@@ -54,7 +54,7 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
         {
             return;
         }
-        
+
         _dbSet.Remove(entity);
     }
 

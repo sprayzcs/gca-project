@@ -15,7 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddNotificationHandler();
-builder.Services.AddDatabaseContext<ShipmentContext>(builder.Configuration["ConnectionString"]);
+builder.Services.AddDatabaseContext<ShipmentContext>(builder.Configuration["ConnectionString"], "shipping");
 builder.Services.AddSecurityServices(builder.Configuration);
 builder.Services.AddHttpClients(builder.Configuration.GetSection("Services"));
 builder.Logging.AddSeq(builder.Configuration["Seq"]);
