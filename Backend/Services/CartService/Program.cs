@@ -1,4 +1,9 @@
-﻿using Shared;
+﻿using CartService.Data;
+using CartService.Infrastructure;
+using CartService.Model;
+using CartService.Services;
+using Shared;
+using Shared.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,12 +14,32 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = builder.Configuration.GetValue<TimeSpan>("SessionTimeout");
+});
+
+builder.Services.AddDatabaseContext<CartContext>(builder.Configuration["ConnectionString"]);
 builder.Services.AddNotificationHandler();
 builder.Services.AddSecurityServices(builder.Configuration);
 builder.Services.AddHttpClients(builder.Configuration.GetSection("Services"));
 builder.Logging.AddSeq(builder.Configuration["Seq"]);
 
+builder.Services.AddAutoMapper(config =>
+{
+    config.CreateMap<Cart, CartDto>();
+}, typeof(Cart), typeof(CartDto));
+
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<ICartService, CartService.Services.CartService>();
+
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
+
+await app.MigrateDbContext<CartContext>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -31,6 +56,8 @@ if (!builder.Environment.IsDevelopment())
 {
     app.UseCustomLag();
 }
+
+app.UseSession();
 
 app.MapControllers();
 

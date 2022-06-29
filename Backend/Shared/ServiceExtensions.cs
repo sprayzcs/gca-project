@@ -17,6 +17,7 @@ public static class ServiceExtensions
 
         return services;
     }
+
     public static IServiceCollection AddDatabaseContext<TContext>(this IServiceCollection services, string connectionString) where TContext : DbContext
     {
         services.AddDbContext<TContext>(options =>
@@ -42,7 +43,7 @@ public static class ServiceExtensions
         var provider = services.BuildServiceProvider();
         var identityService = provider.GetRequiredService<IIdentityService>();
         var idToken = AuthenticationHeaderValue.Parse($"Bearer {identityService.CreateIdentityToken()}");
-        
+
         services.AddHttpClient("cart", client =>
         {
             client.BaseAddress = new Uri(serviceConfiguration["Cart"]);
@@ -69,7 +70,7 @@ public static class ServiceExtensions
 
         return services;
     }
-    
+
     public static IServiceCollection AddSecurityServices(this IServiceCollection services, IConfiguration configuration)
     {
         var securityInfo = new SecurityInfoModel();
