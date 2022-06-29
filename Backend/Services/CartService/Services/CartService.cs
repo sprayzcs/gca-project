@@ -24,24 +24,23 @@ public class CartService : ICartService
 
     public async Task<CartDto> GetCart()
     {
-        string sessionId = _httpContextAccessor.HttpContext!.Session.Id;
-        Cart? cart = await GetCartFromSession();
-        if (cart == null)
+        var cart = await GetCartFromSession();
+
+        if (cart != null)
         {
-            cart = new Cart(Guid.NewGuid())
-            {
-                SessionId = sessionId
-            };
+            return _mapper.Map<CartDto>(cart);
+        }
 
-            cart = await _repository.AddAsync(cart);
+        cart = new Cart(Guid.NewGuid());
 
-            // Set data to session to prevent session reload on every api call (see https://stackoverflow.com/a/57333280/9063611)
-            _httpContextAccessor.HttpContext.Session.Set("cartId", cart.Id.ToByteArray());
+        cart = await _repository.AddAsync(cart);
 
-            if (!await _unitOfWork.CommitAsync())
-            {
-                return new();
-            }
+        // Set data to session to prevent session reload on every api call (see https://stackoverflow.com/a/57333280/9063611)
+        _httpContextAccessor.HttpContext!.Session.Set("cartId", cart.Id.ToByteArray());
+
+        if (!await _unitOfWork.CommitAsync())
+        {
+            return new();
         }
 
         return _mapper.Map<CartDto>(cart);
@@ -49,8 +48,16 @@ public class CartService : ICartService
 
     private async Task<Cart?> GetCartFromSession()
     {
-        string sessionId = _httpContextAccessor.HttpContext!.Session.Id;
+        byte[]? sessionCartId = _httpContextAccessor.HttpContext!.Session.Get("cartId");
 
-        return await _repository.GetBySessionIdAsync(sessionId);
+        Cart? cart = null;
+
+        if (sessionCartId != null)
+        {
+            Guid cartId = new Guid(sessionCartId);
+            cart = await _repository.GetByIdAsync(cartId);
+        }
+
+        return cart;
     }
 }

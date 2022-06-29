@@ -17,14 +17,14 @@ public static class ServiceExtensions
 
         return services;
     }
-    public static IServiceCollection AddDatabaseContext<TContext>(this IServiceCollection services, string connectionString, string serviceName) where TContext : DbContext
+
+    public static IServiceCollection AddDatabaseContext<TContext>(this IServiceCollection services, string connectionString) where TContext : DbContext
     {
         services.AddDbContext<TContext>(options =>
         {
             options.UseNpgsql(connectionString, npgsqlOptions =>
             {
                 npgsqlOptions.EnableRetryOnFailure();
-                npgsqlOptions.MigrationsHistoryTable("__EFMigrationsHistory", serviceName);
             });
         });
 

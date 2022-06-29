@@ -5,5 +5,4 @@ namespace CartService.Infrastructure;
 
 public interface ICartRepository : IRepository<Cart>
 {
-    Task<Cart?> GetBySessionIdAsync(string sessionId);
 }

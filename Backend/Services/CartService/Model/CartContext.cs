@@ -15,8 +15,6 @@ public class CartContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("cart");
-
         base.OnModelCreating(modelBuilder);
     }
 }

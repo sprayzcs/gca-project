@@ -17,7 +17,6 @@ namespace CartService.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("cart")
                 .HasAnnotation("ProductVersion", "6.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -32,13 +31,9 @@ namespace CartService.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("SessionId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Carts", "cart");
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("CartService.Data.CartProduct", b =>
@@ -57,7 +52,7 @@ namespace CartService.Migrations
 
                     b.HasIndex("CartId");
 
-                    b.ToTable("CartProducts", "cart");
+                    b.ToTable("CartProducts");
                 });
 
             modelBuilder.Entity("CartService.Data.CartProduct", b =>

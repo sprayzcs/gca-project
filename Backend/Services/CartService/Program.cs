@@ -21,7 +21,7 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = builder.Configuration.GetValue<TimeSpan>("SessionTimeout");
 });
 
-builder.Services.AddDatabaseContext<CartContext>(builder.Configuration["ConnectionString"], "cart");
+builder.Services.AddDatabaseContext<CartContext>(builder.Configuration["ConnectionString"]);
 builder.Services.AddNotificationHandler();
 builder.Services.AddSecurityServices(builder.Configuration);
 builder.Services.AddHttpClients(builder.Configuration.GetSection("Services"));

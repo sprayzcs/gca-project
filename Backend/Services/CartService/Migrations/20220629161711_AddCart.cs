@@ -5,20 +5,15 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CartService.Migrations
 {
-    public partial class Initial : Migration
+    public partial class AddCart : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "cart");
-
             migrationBuilder.CreateTable(
                 name: "Carts",
-                schema: "cart",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    SessionId = table.Column<string>(type: "text", nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -28,7 +23,6 @@ namespace CartService.Migrations
 
             migrationBuilder.CreateTable(
                 name: "CartProducts",
-                schema: "cart",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -41,7 +35,6 @@ namespace CartService.Migrations
                     table.ForeignKey(
                         name: "FK_CartProducts_Carts_CartId",
                         column: x => x.CartId,
-                        principalSchema: "cart",
                         principalTable: "Carts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -49,7 +42,6 @@ namespace CartService.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartProducts_CartId",
-                schema: "cart",
                 table: "CartProducts",
                 column: "CartId");
         }
@@ -57,12 +49,10 @@ namespace CartService.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CartProducts",
-                schema: "cart");
+                name: "CartProducts");
 
             migrationBuilder.DropTable(
-                name: "Carts",
-                schema: "cart");
+                name: "Carts");
         }
     }
 }
