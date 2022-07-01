@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-database-deployment
+  namespace: gca
+spec:
+  selector:
+    matchLabels:
+      app: catalog-database
+  template:
+    metadata:
+      labels:
+        app: catalog-database
+    spec:
+      containers:
+      - name: catalog-database
+        image: postgres:14
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+          - name: 'POSTGRES_USER'
+            value: 'catalog'
+          - name: 'POSTGRES_PASSWORD'
+            value: 'catalog'
+          - name: 'POSTGRES_DATABASE'
+            value: 'catalog'
+        ports:
+        - containerPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog-database-service
+  namespace: gca
+spec:
+  selector:
+    app: catalog-database
+  ports:
+  - port: 5432
+    targetPort: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-deployment
+  namespace: gca
+spec:
+  selector:
+    matchLabels:
+      app: catalog-deployment
+  template:
+    metadata:
+      labels:
+        app: catalog-deployment
+    spec:
+      containers:
+      - name: catalog-deployment
+        image: lennartkampshoff/gca-catalog:master
+        env:
+          - name: Security__Secret
+            valueFrom:
+              secretKeyRef:
+                name: backend-secrets
+                key: token-secret
+                optional: false
+          - name: Seq
+            value: 'http://seq-logging-data.gca:5341'
+          - name: 'ConnectionString'
+            value: 'Host=catalog-database-service.gca;User ID=catalog;Password=catalog;Database=catalog;'
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog-service
+  namespace: gca
+spec:
+  selector:
+    app: catalog-deployment
+  ports:
+  - port: 5000
+    targetPort: 80
+  type: LoadBalancer
