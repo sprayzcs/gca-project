@@ -29,10 +29,12 @@ builder.Logging.AddSeq(builder.Configuration["Seq"]);
 
 builder.Services.AddAutoMapper(config =>
 {
-    config.CreateMap<Cart, CartDto>();
+    config.CreateMap<Cart, CartDto>()
+        .ForMember(c => c.ProductIds, c => c.MapFrom(m => m.Products.Select(p => p.ProductId)));
 }, typeof(Cart), typeof(CartDto));
 
 builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<ICartProductRepository, CartProductRepository>();
 builder.Services.AddScoped<ICartService, CartService.Services.CartService>();
 
 builder.Services.AddHttpContextAccessor();

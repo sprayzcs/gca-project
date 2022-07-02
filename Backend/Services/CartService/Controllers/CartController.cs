@@ -25,11 +25,30 @@ public class CartController : BaseController
     }
 #endif
 
-    [HttpGet]
-    [Route("/")]
+    [HttpGet("/")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CartDto))]
     public async Task<IActionResult> GetCart()
     {
         return Result(await _cartService.GetCart());
+    }
+
+    [HttpPut("/{productId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CartDto))]
+    public async Task<IActionResult> AddItemToCart(Guid productId)
+    {
+        return Result(await _cartService.AddItemToCart(productId));
+    }
+
+    [HttpDelete("/{productId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CartDto))]
+    public async Task<IActionResult> RemoveItemFromCart(Guid productId)
+    {
+        return Result(await _cartService.RemoveItemFromCart(productId));
+    }
+
+    [HttpDelete("/")]
+    public async Task<IActionResult> ClearCart()
+    {
+        return Result(await _cartService.ClearCart());
     }
 }
