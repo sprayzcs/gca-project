@@ -32,7 +32,7 @@ public class CartController : BaseController
         return Result(await _cartService.GetCart());
     }
 
-    [HttpPut("/{productId:guid}")]
+    [HttpPatch("/{productId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CartDto))]
     public async Task<IActionResult> AddItemToCart(Guid productId)
     {
