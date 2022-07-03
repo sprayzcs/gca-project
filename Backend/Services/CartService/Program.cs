@@ -14,13 +14,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDistributedMemoryCache();
-
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = builder.Configuration.GetValue<TimeSpan>("SessionTimeout");
-});
-
 builder.Services.AddDatabaseContext<CartContext>(builder.Configuration["ConnectionString"]);
 builder.Services.AddNotificationHandler();
 builder.Services.AddSecurityServices(builder.Configuration);
@@ -58,8 +51,6 @@ if (!builder.Environment.IsDevelopment())
 {
     app.UseCustomLag();
 }
-
-app.UseSession();
 
 app.MapControllers();
 

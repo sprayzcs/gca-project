@@ -17,38 +17,42 @@ public class CartController : BaseController
         _cartService = cartService;
     }
 
-#if DEBUG
-    [HttpGet]
-    public IActionResult GetSessionId()
+    [HttpGet("/{cartId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<CartDto>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseModel))]
+    public async Task<IActionResult> GetCart(Guid cartId)
     {
-        return Result(HttpContext.Session.Id);
-    }
-#endif
-
-    [HttpGet("/")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CartDto))]
-    public async Task<IActionResult> GetCart()
-    {
-        return Result(await _cartService.GetCart());
+        return Result(await _cartService.GetCart(cartId));
     }
 
-    [HttpPatch("/{productId:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CartDto))]
-    public async Task<IActionResult> AddItemToCart(Guid productId)
+    [HttpPost("/")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<CartDto>))]
+    public async Task<IActionResult> CreateCart()
     {
-        return Result(await _cartService.AddItemToCart(productId));
+        return Result(await _cartService.CreateCart());
     }
 
-    [HttpDelete("/{productId:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CartDto))]
-    public async Task<IActionResult> RemoveItemFromCart(Guid productId)
+    [HttpPatch("/{cartId:guid}/{productId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<CartDto>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseModel))]
+    public async Task<IActionResult> AddItemToCart(Guid cartId, Guid productId)
     {
-        return Result(await _cartService.RemoveItemFromCart(productId));
+        return Result(await _cartService.AddItemToCart(cartId, productId));
     }
 
-    [HttpDelete("/")]
-    public async Task<IActionResult> ClearCart()
+    [HttpDelete("/{cartId:guid}/{productId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<CartDto>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseModel))]
+    public async Task<IActionResult> RemoveItemFromCart(Guid cartId, Guid productId)
     {
-        return Result(await _cartService.ClearCart());
+        return Result(await _cartService.RemoveItemFromCart(cartId, productId));
+    }
+
+    [HttpPatch("/{cartId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<CartDto>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseModel))]
+    public async Task<IActionResult> UpdateCart(Guid cartId, [FromBody] CartDto cartDto)
+    {
+        return Result(await _cartService.UpdateCart(cartId, cartDto));
     }
 }
