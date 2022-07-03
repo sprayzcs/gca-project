@@ -1,8 +1,10 @@
-namespace Shared;
+﻿namespace Shared;
 
-public record ResponseModel
+public record ResponseModel<T>
 {
-    public object? Data { get; set; }
+    public T? Data { get; set; }
     public bool Success { get; set; }
     public List<string>? Error { get; set; }
 }
+
+public record ResponseModel : ResponseModel<object> { }
