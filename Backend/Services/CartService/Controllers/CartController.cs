@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shared;
 using Shared.Controller;
 using Shared.Data;
+using Shared.Data.Cart;
 
 namespace CartService.Controllers;
 
@@ -51,7 +52,7 @@ public class CartController : BaseController
     [HttpPatch("/{cartId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<CartDto>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseModel))]
-    public async Task<IActionResult> UpdateCart(Guid cartId, [FromBody] CartDto cartDto)
+    public async Task<IActionResult> UpdateCart(Guid cartId, [FromBody] UpdateCartDto cartDto)
     {
         return Result(await _cartService.UpdateCart(cartId, cartDto));
     }

@@ -1,4 +1,5 @@
 ﻿using Shared.Data;
+using Shared.Data.Cart;
 
 namespace CartService.Services;
 
@@ -10,7 +11,7 @@ public interface ICartService
 
     Task<CartDto> RemoveItemFromCart(Guid cartId, Guid productId);
 
-    Task<CartDto> UpdateCart(Guid cartId, CartDto cartDto);
+    Task<CartDto> UpdateCart(Guid cartId, UpdateCartDto cartDto);
 
     Task<CartDto> CreateCart();
 }
