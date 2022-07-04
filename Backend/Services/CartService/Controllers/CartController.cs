@@ -26,6 +26,14 @@ public class CartController : BaseController
         return Result(await _cartService.GetCart(cartId));
     }
 
+    [HttpGet("/{cartId:guid}/count")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<int>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseModel))]
+    public async Task<IActionResult> GetCartItemCount(Guid cartId)
+    {
+        return Result(await _cartService.GetCartItemCount(cartId));
+    }
+
     [HttpPost("/")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<CartDto>))]
     public async Task<IActionResult> CreateCart()

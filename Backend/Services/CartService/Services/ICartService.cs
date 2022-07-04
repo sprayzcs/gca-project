@@ -14,4 +14,6 @@ public interface ICartService
     Task<CartDto> UpdateCart(Guid cartId, UpdateCartDto cartDto);
 
     Task<CartDto> CreateCart();
+
+    Task<int> GetCartItemCount(Guid cartId);
 }

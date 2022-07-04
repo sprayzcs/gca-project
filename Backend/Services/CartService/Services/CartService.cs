@@ -164,4 +164,16 @@ public class CartService : ICartService
 
         return _mapper.Map<CartDto>(cart);
     }
+
+    public async Task<int> GetCartItemCount(Guid cartId)
+    {
+        Cart? cart = await _repository.GetByIdAsync(cartId);
+        if (cart == null)
+        {
+            _notificationHandler.RaiseError(GenericErrorCodes.ObjectNotFound);
+            return new();
+        }
+
+        return cart.Products.Count;
+    }
 }
