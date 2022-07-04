@@ -27,6 +27,7 @@ builder.Services.AddAutoMapper(config =>
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddDefaultCors(builder.Configuration);
 
 var app = builder.Build();
 
@@ -39,6 +40,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("cors");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
