@@ -14,13 +14,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDistributedMemoryCache();
-
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = builder.Configuration.GetValue<TimeSpan>("SessionTimeout");
-});
-
 builder.Services.AddDatabaseContext<CartContext>(builder.Configuration["ConnectionString"]);
 builder.Services.AddNotificationHandler();
 builder.Services.AddSecurityServices(builder.Configuration);
@@ -29,10 +22,12 @@ builder.Logging.AddSeq(builder.Configuration["Seq"]);
 
 builder.Services.AddAutoMapper(config =>
 {
-    config.CreateMap<Cart, CartDto>();
+    config.CreateMap<Cart, CartDto>()
+        .ForMember(c => c.ProductIds, c => c.MapFrom(m => m.Products.Select(p => p.ProductId)));
 }, typeof(Cart), typeof(CartDto));
 
 builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<ICartProductRepository, CartProductRepository>();
 builder.Services.AddScoped<ICartService, CartService.Services.CartService>();
 
 builder.Services.AddHttpContextAccessor();
@@ -56,8 +51,6 @@ if (!builder.Environment.IsDevelopment())
 {
     app.UseCustomLag();
 }
-
-app.UseSession();
 
 app.MapControllers();
 

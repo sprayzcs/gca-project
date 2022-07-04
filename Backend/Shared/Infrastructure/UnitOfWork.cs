@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Shared.Infrastructure;
 
@@ -13,7 +14,7 @@ public class UnitOfWork : IUnitOfWork
         _context = context;
     }
 
-    public async Task<bool> CommitAsync()
+    public async Task<bool> CommitAsync(bool requireChangesToSuccess = true)
     {
         if (_notificationHandler.HasErrors())
         {
@@ -21,7 +22,7 @@ public class UnitOfWork : IUnitOfWork
         }
 
         var savedChanges = await _context.SaveChangesAsync();
-        if (savedChanges != 0)
+        if (!requireChangesToSuccess || savedChanges != 0)
         {
             return true;
         }
