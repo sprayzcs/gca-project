@@ -11,7 +11,7 @@ public class CartDto
 {
     public Guid Id { get; set; }
 
-    public ICollection<Guid>? ProductIds { get; set; }
+    public ICollection<Guid> ProductIds { get; set; } = Array.Empty<Guid>();
 
     public bool Active { get; set; }
 }

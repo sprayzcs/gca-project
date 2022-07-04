@@ -3,6 +3,7 @@ using CartService.Data;
 using CartService.Infrastructure;
 using Shared;
 using Shared.Data;
+using Shared.Data.Cart;
 using Shared.Infrastructure;
 
 namespace CartService.Services;
@@ -115,7 +116,7 @@ public class CartService : ICartService
         return _mapper.Map<CartDto>(cart);
     }
 
-    public async Task<CartDto> UpdateCart(Guid cartId, CartDto cartDto)
+    public async Task<CartDto> UpdateCart(Guid cartId, UpdateCartDto cartDto)
     {
         Cart? cart = await _repository.GetByIdAsync(cartId);
 
