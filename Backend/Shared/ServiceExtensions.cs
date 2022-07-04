@@ -83,4 +83,20 @@ public static class ServiceExtensions
 
         return services;
     }
+
+    /// <summary>
+    /// Call this and later "app.UseCors("cors")"
+    /// </summary>
+    public static IServiceCollection AddDefaultCors(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy(name: "cors", policy =>
+            {
+                policy.WithOrigins(configuration["AllowedHosts"]);
+            });
+        });
+
+        return services;
+    }
 }

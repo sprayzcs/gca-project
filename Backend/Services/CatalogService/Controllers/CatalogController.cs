@@ -6,7 +6,8 @@ using Shared.Data;
 
 namespace CatalogService.Controllers;
 
-[Route("/catalog/[action]")]
+[ApiController]
+[Route("")]
 public class CatalogController : BaseController
 {
     private readonly IProductService _service;
@@ -17,7 +18,6 @@ public class CatalogController : BaseController
     }
 
     [HttpGet]
-    [Route("/")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ICollection<ProductDto>))]
     public async Task<IActionResult> GetItems()
     {
@@ -25,7 +25,7 @@ public class CatalogController : BaseController
     }
 
     [HttpGet]
-    [Route("/{id}")]
+    [Route("/{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
     public async Task<IActionResult> GetItem([FromRoute] Guid id)
     {
