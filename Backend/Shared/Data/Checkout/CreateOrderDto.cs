@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Data;
+namespace Shared.Data.Checkout;
 
-public class OrderDto
+public class CreateOrderDto
 {
-    public Guid Id { get; set; }
-
-    public DateTimeOffset Date { get; set; }
+    public Guid CartId { get; set; }
 
     public string Country { get; set; } = string.Empty;
 
@@ -23,8 +21,4 @@ public class OrderDto
     public string CreditCardNumber { get; set; } = string.Empty;
 
     public DateTimeOffset CreditCardExpiryDate { get; set; }
-
-    public Guid CartId { get; set; }
-
-    public Guid? ShipmentId { get; set; }
 }
