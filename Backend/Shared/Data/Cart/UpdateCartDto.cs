@@ -9,4 +9,6 @@ namespace Shared.Data.Cart;
 public class UpdateCartDto : CartDto
 {
     public new ICollection<Guid>? ProductIds { get; set; }
+
+    public new bool? Active { get; set; }
 }

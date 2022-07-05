@@ -5,6 +5,7 @@ using Shared;
 using Shared.Data;
 using Shared.Data.Cart;
 using Shared.Infrastructure;
+using Shared.Security;
 
 namespace CartService.Services;
 
@@ -15,18 +16,21 @@ public class CartService : ICartService
     private readonly INotificationHandler _notificationHandler;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly ISecuredMethodService _securedMethodService;
 
     public CartService(ICartRepository cartRepository,
                        ICartProductRepository cartProductRepository,
                        INotificationHandler notificationHandler,
                        IUnitOfWork unitOfWork,
-                       IMapper mapper)
+                       IMapper mapper,
+                       ISecuredMethodService securedMethodService)
     {
         _repository = cartRepository;
         _cartProductRepository = cartProductRepository;
         _notificationHandler = notificationHandler;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _securedMethodService = securedMethodService;
     }
 
     public async Task<CartDto> GetCart(Guid cartId)
@@ -155,6 +159,17 @@ public class CartService : ICartService
                     cart.Products.Add(cartProduct);
                 }
             }
+        }
+
+        if (cartDto.Active != null)
+        {
+            if (!_securedMethodService.CanAccess())
+            {
+                _notificationHandler.RaiseError(GenericErrorCodes.InsufficientPermissions);
+                return new();
+            }
+
+            cart.Active = cartDto.Active.Value;
         }
 
         if (!await _unitOfWork.CommitAsync(false))
