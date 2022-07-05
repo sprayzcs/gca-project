@@ -69,6 +69,12 @@ public class CartService : ICartService
             return new();
         }
 
+        if (!cart.Active)
+        {
+            _notificationHandler.RaiseError(CartErrors.CartDeactivated);
+            return new();
+        }
+
         if (cart.Products.Any(p => p.ProductId == productId))
         {
             _notificationHandler.RaiseError(CartErrors.ProductAlreadyInCart);
@@ -99,6 +105,12 @@ public class CartService : ICartService
         if (cart == null)
         {
             _notificationHandler.RaiseError(GenericErrorCodes.ObjectNotFound);
+            return new();
+        }
+
+        if (!cart.Active)
+        {
+            _notificationHandler.RaiseError(CartErrors.CartDeactivated);
             return new();
         }
 
@@ -133,6 +145,12 @@ public class CartService : ICartService
         if (cartDto == null)
         {
             _notificationHandler.RaiseError(CartErrors.CartDtoNull);
+            return new();
+        }
+
+        if (!cart.Active)
+        {
+            _notificationHandler.RaiseError(CartErrors.CartDeactivated);
             return new();
         }
 
