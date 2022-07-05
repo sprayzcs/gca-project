@@ -44,25 +44,25 @@ public static class ServiceExtensions
         var identityService = provider.GetRequiredService<IIdentityService>();
         var idToken = AuthenticationHeaderValue.Parse($"Bearer {identityService.CreateIdentityToken()}");
 
-        services.AddHttpClient("cart", client =>
+        services.AddHttpClient(HttpClients.Cart, client =>
         {
             client.BaseAddress = new Uri(serviceConfiguration["Cart"]);
             client.DefaultRequestHeaders.Authorization = idToken;
         });
 
-        services.AddHttpClient("shipping", client =>
+        services.AddHttpClient(HttpClients.Shipping, client =>
         {
             client.BaseAddress = new Uri(serviceConfiguration["Shipping"]);
             client.DefaultRequestHeaders.Authorization = idToken;
         });
 
-        services.AddHttpClient("checkout", client =>
+        services.AddHttpClient(HttpClients.Checkout, client =>
         {
             client.BaseAddress = new Uri(serviceConfiguration["Checkout"]);
             client.DefaultRequestHeaders.Authorization = idToken;
         });
 
-        services.AddHttpClient("catalog", client =>
+        services.AddHttpClient(HttpClients.Catalog, client =>
         {
             client.BaseAddress = new Uri(serviceConfiguration["Catalog"]);
             client.DefaultRequestHeaders.Authorization = idToken;
