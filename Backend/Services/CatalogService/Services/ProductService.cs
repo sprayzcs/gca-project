@@ -11,29 +11,41 @@ public class ProductService : IProductService
     private readonly IProductRepository _repository;
     private readonly IMapper _mapper;
     private readonly INotificationHandler _notificationHandler;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ProductService(IProductRepository repository, IMapper mapper, INotificationHandler notificationHandler)
+    public ProductService(IProductRepository repository,
+                          IMapper mapper,
+                          INotificationHandler notificationHandler,
+                          IHttpContextAccessor httpContextAccessor)
     {
         _repository = repository;
         _mapper = mapper;
-        this._notificationHandler = notificationHandler;
+        _notificationHandler = notificationHandler;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<ProductDto> GetProduct(Guid id)
     {
-        var product = await _repository.GetByIdAsync(id);
+        var product = _repository.GetByIdAsQueryable(id);
 
-        if (product == null)
+        if (!await product.AnyAsync())
         {
             _notificationHandler.RaiseError(GenericErrorCodes.ObjectNotFound);
             return new();
         }
 
-        return _mapper.Map<ProductDto>(product);
+
+        return await _mapper.ProjectTo<ProductDto>(product, new { baseUrl = GetBaseUrl() }).FirstAsync();
     }
 
     public async Task<ICollection<ProductDto>> GetProducts()
     {
-        return _mapper.Map<List<ProductDto>>(await _repository.GetAllNoTracking().ToListAsync());
+        return await _mapper.ProjectTo<ProductDto>(_repository.GetAllNoTracking(), new { baseUrl = GetBaseUrl() }).ToListAsync();
+    }
+
+    private string GetBaseUrl()
+    {
+        var request = _httpContextAccessor.HttpContext!.Request;
+        return $"{request.Scheme}://{request.Host}";
     }
 }
