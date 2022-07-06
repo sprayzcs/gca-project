@@ -15,6 +15,7 @@ public class CheckoutService : ICheckoutService
     private readonly IUnitOfWork _unitOfWork;
     private readonly INotificationHandler _notificationHandler;
     private readonly IMapper _mapper;
+    private readonly ILogger<CheckoutService> _logger;
 
     private readonly HttpClient _cartClient;
     private readonly HttpClient _catalogClient;
@@ -24,13 +25,14 @@ public class CheckoutService : ICheckoutService
                            IUnitOfWork unitOfWork,
                            INotificationHandler notificationHandler,
                            IMapper mapper,
-                           IHttpClientFactory httpClientFactory)
+                           IHttpClientFactory httpClientFactory,
+                           ILogger<CheckoutService> logger)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
         _notificationHandler = notificationHandler;
         _mapper = mapper;
-
+        _logger = logger;
         _cartClient = httpClientFactory.CreateClient(HttpClients.Cart);
         _catalogClient = httpClientFactory.CreateClient(HttpClients.Catalog);
         _shippingClient = httpClientFactory.CreateClient(HttpClients.Shipping);
@@ -105,13 +107,14 @@ public class CheckoutService : ICheckoutService
             OrderId = order.Id
         });
 
-        if (shipmentResponseModel == null || !shipmentResponseModel.Success || shipmentResponseModel.Data == null)
+        if (shipmentResponseModel?.Data != null)
         {
-            _notificationHandler.RaiseError(CheckoutErrors.ShipmentNotCreated);
-            return new();
+            order.ShipmentId = shipmentResponseModel.Data.Id;
         }
-
-        order.ShipmentId = shipmentResponseModel.Data.Id;
+        else
+        {
+            _logger.LogWarning("Could not create shipment for order '{OrderId}'", order.Id);
+        }
 
         if (!await _unitOfWork.CommitAsync())
         {
