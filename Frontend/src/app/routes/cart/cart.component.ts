@@ -23,7 +23,7 @@ export class CartComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.select(CartState.cart).subscribe(cart => {
-      if(!cart){
+      if(cart == undefined || cart.productIds.length == 0){
         return;
       }
     

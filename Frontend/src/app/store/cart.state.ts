@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { NbGlobalPhysicalPosition, NbToastrService } from "@nebular/theme";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { BackendService } from "../util/enums/services.enum";
 import { CartModel } from "../util/models/cart/cart.model";
@@ -37,7 +38,8 @@ export class CartState {
 
     constructor(
         private readonly cartService: CartService,
-        private readonly apiResponseService: ApiResponseService
+        private readonly apiResponseService: ApiResponseService,
+        private readonly toastrService: NbToastrService
     ) {}
 
     @Action(SetupCart.Start)
@@ -114,6 +116,15 @@ export class CartState {
     addItemToCartSuccess(context: StateContext<CartStateModel>, action: AddToCart.Success): void {
         this.patchLoadingOperations(context, -1);
         context.patchState({ cart: action.cart });
+        this.toastrService.success(
+            '',
+            'In den Warenkorb gelegt',
+            {
+                position: NbGlobalPhysicalPosition.BOTTOM_RIGHT,
+                duration: 5000,
+                hasIcon: true,
+                icon: 'shopping-cart-outline'
+            });
     }
 
 
