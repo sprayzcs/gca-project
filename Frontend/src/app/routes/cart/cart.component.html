@@ -1,10 +1,10 @@
 <div class="wrapper">
-    <div *ngIf="isCartEmpty();else notEmpty">
-        Der Warenkorb ist leer
-    </div>
     <div class="top-button right-buttons">
         <button nbButton ghost *ngIf="!isCartEmpty()">Warenkorb leeren</button>
         <button nbButton status="primary" routerLink="/">Weiter einkaufen</button>
+    </div>
+    <div *ngIf="isCartEmpty();else notEmpty">
+        Der Warenkorb ist leer
     </div>
     <ng-template #notEmpty>
         <app-item-list [products]="cartProducts"></app-item-list>

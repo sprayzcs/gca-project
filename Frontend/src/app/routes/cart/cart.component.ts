@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
+import { FailAction } from 'src/app/store/actions/base.actions';
 import { CartState } from 'src/app/store/cart.state';
 import { BackendService } from 'src/app/util/enums/services.enum';
+import { CartModel } from 'src/app/util/models/cart/cart.model';
 import { ProductModel } from 'src/app/util/models/catalog/product.model';
 import { ApiResponseService } from 'src/app/util/services/api-response.service';
 import { UrlBuilderService } from 'src/app/util/services/url-builder.service';
@@ -20,20 +22,22 @@ export class CartComponent implements OnInit {
     private readonly store: Store) { }
 
   ngOnInit(): void {
-    this.loadCartItems();
+    this.store.select(CartState.cart).subscribe(cart => {
+      if(!cart){
+        return;
+      }
+    
+      this.loadCartItems(cart);
+    })
   }
 
-  loadCartItems(): void {
-    const cart = this.store.selectSnapshot(CartState.cart);
-    if(!cart){
-      return;
-    }
-
+  loadCartItems(cart: CartModel): void {
     this.loading = true;
     this.apiResponse.resolveGet<ProductModel[]>(
       BackendService.Catalog,
-      UrlBuilderService.buildQueryStringWithArray('productIds', cart.productIds),
-      () => this.loading = false)
+      'list' + UrlBuilderService.buildQueryStringWithArray('productIds', cart.productIds),
+      () => this.loading = false,
+      () => new FailAction([]))
       .subscribe(products => {
         if(products){
           this.cartProducts = products;
