@@ -24,14 +24,15 @@ public class ShippingService : IShippingService
         INotificationHandler notificationHandler,
         IUnitOfWork unitOfWork,
         IMapper mapper
-        ) {
+        )
+    {
         _shippingRepository = shippingRepository;
         _securedMethodService = securedMethodService;
         _notificationHandler = notificationHandler;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
-    
+
     public async Task<ShipmentDto> CreateShipmentForOrderAsync(Guid orderId, int orderPrice)
     {
         if (!_securedMethodService.CanAccess())
@@ -46,7 +47,7 @@ public class ShippingService : IShippingService
             _notificationHandler.RaiseError(ShippingErrors.ShipmentAlreadyExists);
             return new();
         }
-        
+
         int shippingPrice = 0;
         if (orderPrice <= 10000)
         {
@@ -65,15 +66,15 @@ public class ShippingService : IShippingService
         return _mapper.Map<ShipmentDto>(shipment);
     }
 
-    public async Task<ShipmentDto> GetShipmentByOrderIdAsync(Guid orderId)
+    public async Task<ShipmentDto> GetShipmentByIdAsync(Guid shipmentId)
     {
-        var shipment = await _shippingRepository.GetByOrderIdAsync(orderId);
+        var shipment = await _shippingRepository.GetByIdAsync(shipmentId);
         if (shipment == null)
         {
-            _notificationHandler.RaiseError(GenericErrorCodes.InsufficientPermissions);
+            _notificationHandler.RaiseError(GenericErrorCodes.ObjectNotFound);
             return new();
         }
-        
+
         return _mapper.Map<ShipmentDto>(shipment);
     }
 
