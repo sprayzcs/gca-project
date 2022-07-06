@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CatalogService.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Shared;
 using Shared.Data;
 
@@ -36,6 +37,16 @@ public class ProductService : IProductService
 
 
         return await _mapper.ProjectTo<ProductDto>(product, new { baseUrl = GetBaseUrl() }).FirstAsync();
+    }
+
+    public async Task<IEnumerable<ProductDto>> GetProductsByIdsAsync(IEnumerable<Guid> productIds, CancellationToken cancellationToken)
+    {
+        return _mapper.Map<IEnumerable<ProductDto>>(
+            await _repository
+                .GetAllNoTracking()
+                .Where(p => productIds.Contains(p.Id))
+                .ToListAsync(cancellationToken)
+            );
     }
 
     public async Task<ICollection<ProductDto>> GetProducts()
