@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { SetupCart } from './store/actions/setup-cart.actions';
 import { CartState } from './store/cart.state';
 
@@ -11,6 +12,8 @@ import { CartState } from './store/cart.state';
 })
 export class AppComponent implements OnInit {
   
+  @Select(CartState.loading) loading$!: Observable<boolean>;
+
   constructor(
     private readonly router: Router,
     private readonly store: Store
