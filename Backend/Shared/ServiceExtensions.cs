@@ -95,6 +95,7 @@ public static class ServiceExtensions
             {
                 policy.WithOrigins(configuration["AllowedHosts"]);
                 policy.WithMethods("GET", "POST", "PATCH", "DELETE");
+                policy.WithHeaders("content-type");
             });
         });
 
