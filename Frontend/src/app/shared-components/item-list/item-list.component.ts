@@ -15,4 +15,8 @@ export class ItemListComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  getSummedPrice(): number {
+    return this.products.map(p => p.price).reduce((prev, current) => prev + current, 0);
+  }
+
 }

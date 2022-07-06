@@ -9,4 +9,9 @@
         <td class="name">{{product.name}}</td>
         <td class="price">{{product.price | price}}</td>
     </tr>
+    <tr class="footer">
+        <td></td>
+        <td></td>
+        <td class="price">= {{getSummedPrice() | price}}</td>
+    </tr>
 </table>
