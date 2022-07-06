@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiResponseService } from 'src/app/util/api-response.service';
+import { ApiResponseService } from 'src/app/util/services/api-response.service';
 import { BackendService } from 'src/app/util/enums/services.enum';
 import { ProductModel } from 'src/app/util/models/catalog/product.model';
 
