@@ -38,19 +38,18 @@ public class ProductService : IProductService
         return await _mapper.ProjectTo<ProductDto>(product, new { baseUrl = GetBaseUrl() }).FirstAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<ProductDto>> GetProductsByIdsAsync(IEnumerable<Guid> productIds, CancellationToken cancellationToken)
+    public  Task<List<ProductDto>> GetProductsByIdsAsync(IEnumerable<Guid> productIds, CancellationToken cancellationToken)
     {
-        return _mapper.Map<IEnumerable<ProductDto>>(
-            await _repository
+        return  _mapper.ProjectTo<ProductDto>(
+            _repository
                 .GetAllNoTracking()
                 .Where(p => productIds.Contains(p.Id))
-                .ToListAsync(cancellationToken)
-            );
+            , new { baseUrl = GetBaseUrl() }).ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<ProductDto>> GetProducts(CancellationToken cancellationToken)
+    public Task<List<ProductDto>> GetProducts()
     {
-        return await _mapper.ProjectTo<ProductDto>(_repository.GetAllNoTracking(), new { baseUrl = GetBaseUrl() }).ToListAsync(cancellationToken);
+        return _mapper.ProjectTo<ProductDto>(_repository.GetAllNoTracking(), new { baseUrl = GetBaseUrl() }).ToListAsync();
     }
 
     private string GetBaseUrl()

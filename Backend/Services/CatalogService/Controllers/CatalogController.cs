@@ -24,9 +24,9 @@ public class CatalogController : BaseController
         return Result(await _service.GetProducts(cancellationToken));
     }
 
-    [HttpGet("/list")]
+    [HttpGet("list")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<IEnumerable<ProductDto>>))]
-    public async Task<IActionResult> GetProductsByIds([FromQuery] IEnumerable<Guid> productIds, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetItemsByIds([FromQuery] IEnumerable<Guid> productIds, CancellationToken cancellationToken)
     {
         return Result(await _service.GetProductsByIdsAsync(productIds, cancellationToken));
     }
