@@ -18,7 +18,7 @@ public class CatalogController : BaseController
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ICollection<ProductDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDto>))]
     public async Task<IActionResult> GetItems()
     {
         return Result(await _service.GetProducts());
