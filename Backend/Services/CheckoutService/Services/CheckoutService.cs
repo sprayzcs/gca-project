@@ -40,7 +40,7 @@ public class CheckoutService : ICheckoutService
     {
         var order = await _repository.GetByIdAsync(orderId);
 
-        if(order == null)
+        if (order == null)
         {
             _notificationHandler.RaiseError(GenericErrorCodes.ObjectNotFound);
             return new();
@@ -59,7 +59,7 @@ public class CheckoutService : ICheckoutService
         }
 
         var cartResponseModel = await _cartClient.GetFromJsonAsync<ResponseModel<CartDto>>($"/{cartId}");
-        if (cartResponseModel == null || !cartResponseModel.Success || cartResponseModel.Data == null)
+        if (cartResponseModel == null || !cartResponseModel.Success || cartResponseModel.Data == null || !cartResponseModel.Data.Active)
         {
             _notificationHandler.RaiseError(CheckoutErrors.InvalidCart);
             return new();
