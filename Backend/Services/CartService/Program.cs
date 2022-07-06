@@ -50,6 +50,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.AddIdentityMiddleware();
+
 if (!builder.Environment.IsDevelopment())
 {
     app.UseCustomLag();
