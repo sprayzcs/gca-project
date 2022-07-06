@@ -18,13 +18,14 @@ public class CatalogController : BaseController
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<IEnumerable<ProductDto>>))]
     public async Task<IActionResult> GetItems()
     {
         return Result(await _service.GetProducts());
     }
 
     [HttpGet("/list")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<IEnumerable<ProductDto>>))]
     public async Task<IActionResult> GetItemsByIds([FromQuery] IEnumerable<Guid> productIds, CancellationToken cancellationToken)
     {
         return Result(await _service.GetProductsByIdsAsync(productIds, cancellationToken));
@@ -32,7 +33,8 @@ public class CatalogController : BaseController
 
     [HttpGet]
     [Route("/{id:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<ProductDto>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseModel))]
     public async Task<IActionResult> GetItem([FromRoute] Guid id)
     {
         return Result(await _service.GetProduct(id));
