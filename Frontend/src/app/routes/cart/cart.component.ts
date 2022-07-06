@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { FailAction } from 'src/app/store/actions/base.actions';
+import { ClearCart } from 'src/app/store/actions/clear-cart.actions';
 import { CartState } from 'src/app/store/cart.state';
 import { BackendService } from 'src/app/util/enums/services.enum';
 import { CartModel } from 'src/app/util/models/cart/cart.model';
@@ -24,6 +25,7 @@ export class CartComponent implements OnInit {
   ngOnInit(): void {
     this.store.select(CartState.cart).subscribe(cart => {
       if(cart == undefined || cart.productIds.length == 0){
+        this.cartProducts = [];
         return;
       }
     
@@ -47,6 +49,10 @@ export class CartComponent implements OnInit {
 
   isCartEmpty(): boolean {
     return this.cartProducts.length == 0;
+  }
+
+  clearCart(): void {
+    this.store.dispatch(new ClearCart.Start());
   }
 
 }

@@ -1,11 +1,14 @@
 import { Injectable } from "@angular/core";
 import { NbGlobalPhysicalPosition, NbToastrService } from "@nebular/theme";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
+import { CartComponent } from "../routes/cart/cart.component";
 import { BackendService } from "../util/enums/services.enum";
 import { CartModel } from "../util/models/cart/cart.model";
+import { UpdateCartModel } from "../util/models/cart/update-cart.model";
 import { ApiResponseService } from "../util/services/api-response.service";
 import { CartService } from "../util/services/cart.service";
 import { AddToCart } from "./actions/add-to-cart.actions";
+import { ClearCart } from "./actions/clear-cart.actions";
 import { SetupCart } from "./actions/setup-cart.actions";
 import { CartStateModel } from "./models/cart-state.model";
 
@@ -128,6 +131,44 @@ export class CartState {
     }
 
 
+    @Action(ClearCart.Start)
+    clearCart(context: StateContext<CartStateModel>, action: ClearCart.Start): void {
+        this.patchLoadingOperations(context, +1);
+
+        const state = context.getState();
+        this.apiResponseService
+            .resolvePatch<UpdateCartModel, CartModel>(
+                BackendService.Cart,
+                `${state.cart!.id}`,
+                {productIds: []},
+                () => {console.log('handle')},
+                errors => new ClearCart.Fail(errors)
+            ).subscribe(cart => {
+                if(cart){
+                    context.dispatch(new ClearCart.Success(cart));
+                }
+            })
+    }
+
+    @Action(ClearCart.Fail)
+    clearCartFail(context: StateContext<CartStateModel>): void {
+        this.patchLoadingOperations(context, -1);
+    }
+
+    @Action(ClearCart.Success)
+    clearCartSuccess(context: StateContext<CartStateModel>, action: ClearCart.Success): void {
+        this.patchLoadingOperations(context, -1);
+        context.patchState({ cart: action.cart });
+        this.toastrService.success(
+            '',
+            'Warenkorb wurde geleert',
+            {
+                position: NbGlobalPhysicalPosition.BOTTOM_RIGHT,
+                duration: 5000,
+                hasIcon: true,
+                icon: 'shopping-cart-outline'
+            });
+    }
 
     private patchLoadingOperations(context: StateContext<CartStateModel>, by: number): void {
         context.patchState({
