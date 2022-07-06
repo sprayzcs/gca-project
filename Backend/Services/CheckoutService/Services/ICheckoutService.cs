@@ -7,5 +7,5 @@ public interface ICheckoutService
 {
     Task<OrderDto> CreateOrderFromCart(CreateOrderDto createOrderDto);
 
-    Task<OrderDto> GetOrderById(Guid orderId);
+    Task<OrderDto> GetOrderById(Guid orderId, CancellationToken cancellationToken);
 }

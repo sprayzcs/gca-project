@@ -30,7 +30,7 @@ internal class CustomLagMiddleware
         TimeSpan delay = GetCustomLagTime();
         _logger.LogDebug("Delaying request '{id}' to '{path}' by '{delay}' milliseconds", httpContext.TraceIdentifier, httpContext.Request.Path, delay.TotalMilliseconds);
 
-        await Task.Delay(delay);
+        await Task.Delay(delay, httpContext.RequestAborted);
         await _next(httpContext);
     }
 

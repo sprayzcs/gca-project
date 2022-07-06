@@ -10,8 +10,8 @@ public class ShippingRepository : Repository<Shipment>, IShippingRepository
     {
     }
 
-    public Task<Shipment?> GetByOrderIdAsync(Guid orderId)
+    public Task<Shipment?> GetByOrderIdAsync(Guid orderId, CancellationToken cancellationToken)
     {
-        return _dbSet.FirstOrDefaultAsync(s => s.OrderId == orderId);
+        return _dbSet.FirstOrDefaultAsync(s => s.OrderId == orderId, cancellationToken);
     }
 }

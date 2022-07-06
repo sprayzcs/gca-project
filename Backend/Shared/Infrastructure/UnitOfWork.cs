@@ -14,14 +14,14 @@ public class UnitOfWork : IUnitOfWork
         _context = context;
     }
 
-    public async Task<bool> CommitAsync(bool requireChangesToSuccess = true)
+    public async Task<bool> CommitAsync(bool requireChangesToSuccess = true, CancellationToken cancellationToken = default)
     {
         if (_notificationHandler.HasErrors())
         {
             return false;
         }
 
-        var savedChanges = await _context.SaveChangesAsync();
+        var savedChanges = await _context.SaveChangesAsync(cancellationToken);
         if (!requireChangesToSuccess || savedChanges != 0)
         {
             return true;

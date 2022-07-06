@@ -5,5 +5,5 @@ namespace CheckoutService.Infrastructure;
 
 public interface IOrderRepository : IRepository<Order>
 {
-    Task<bool> HasCartAlreadyBeenOrdered(Guid cartId);
+    Task<bool> HasCartAlreadyBeenOrdered(Guid cartId, CancellationToken cancellationToken = default);
 }

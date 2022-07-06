@@ -6,5 +6,5 @@ namespace ShippingService.Infrastructure;
 
 public interface IShippingRepository : IRepository<Shipment>
 {
-    Task<Shipment?> GetByOrderIdAsync(Guid orderId);
+    Task<Shipment?> GetByOrderIdAsync(Guid orderId, CancellationToken cancellationToken);
 }
