@@ -8,7 +8,7 @@ using Shared.Data.Cart;
 namespace CartService.Controllers;
 
 [ApiController]
-[Route("[controller]/[action]")]
+[Route("")]
 public class CartController : BaseController
 {
     private readonly ICartService _cartService;
