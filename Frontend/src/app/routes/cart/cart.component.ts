@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Select, Store } from '@ngxs/store';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { FailAction } from 'src/app/store/actions/base.actions';
 import { ClearCart } from 'src/app/store/actions/clear-cart.actions';
 import { CartState } from 'src/app/store/cart.state';
@@ -13,17 +14,27 @@ import { UrlBuilderService } from 'src/app/util/services/url-builder.service';
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss']
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
+
+  @Select(CartState.loading) loadingCart$!: Observable<boolean>;
 
   loading = false;
   cartProducts: ProductModel[] = [];
+  
+  private onDestroy$: Subject<void> = new Subject<void>();
+
 
   constructor(
     private readonly apiResponse: ApiResponseService,
     private readonly store: Store) { }
 
+  ngOnDestroy(): void {
+    this.onDestroy$.next();
+    this.onDestroy$.complete();
+  }
+
   ngOnInit(): void {
-    this.store.select(CartState.cart).subscribe(cart => {
+    this.store.select(CartState.cart).pipe(takeUntil(this.onDestroy$)).subscribe(cart => {
       if(cart == undefined || cart.productIds.length == 0){
         this.cartProducts = [];
         return;
@@ -35,6 +46,7 @@ export class CartComponent implements OnInit {
 
   loadCartItems(cart: CartModel): void {
     this.loading = true;
+    
     this.apiResponse.resolveGet<ProductModel[]>(
       BackendService.Catalog,
       'list' + UrlBuilderService.buildQueryStringWithArray('productIds', cart.productIds),

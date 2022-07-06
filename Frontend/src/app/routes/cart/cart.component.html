@@ -1,18 +1,19 @@
 <div class="wrapper">
+  <div *ngIf="loading || (loadingCart$ | async); else cart" [nbSpinner]="true" class="spinner"></div>
+  <ng-template #cart>
     <div class="top-button right-buttons">
-        <button nbButton ghost *ngIf="!isCartEmpty()" (click)="clearCart()">Warenkorb leeren</button>
-        <button nbButton status="primary" routerLink="/">Weiter einkaufen</button>
+      <button nbButton ghost *ngIf="!isCartEmpty()" (click)="clearCart()">
+        Warenkorb leeren
+      </button>
+      <button nbButton status="primary" routerLink="/">Weiter einkaufen</button>
     </div>
-    <div *ngIf="isCartEmpty();else notEmpty">
-        Der Warenkorb ist leer
-    </div>
+    <div *ngIf="isCartEmpty(); else notEmpty">Der Warenkorb ist leer</div>
     <ng-template #notEmpty>
-        <app-item-list [products]="cartProducts"></app-item-list>
-        <app-contact-form *ngIf="cartProducts.length != 0"></app-contact-form>
-        <div class="order-button right-buttons">
-            <button nbButton status="primary">
-                Kostenpflichtig bestellen
-            </button>
-        </div>
+      <app-item-list [products]="cartProducts"></app-item-list>
+      <app-contact-form *ngIf="cartProducts.length != 0"></app-contact-form>
+      <div class="order-button right-buttons">
+        <button nbButton status="primary">Kostenpflichtig bestellen</button>
+      </div>
     </ng-template>
+  </ng-template>
 </div>
