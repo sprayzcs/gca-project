@@ -1,4 +1,9 @@
-﻿using Shared;
+﻿using CheckoutService.Data;
+using CheckoutService.Infrastructure;
+using CheckoutService.Model;
+using CheckoutService.Services;
+using Shared;
+using Shared.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,12 +14,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDatabaseContext<CheckoutContext>(builder.Configuration["ConnectionString"]);
 builder.Services.AddNotificationHandler();
 builder.Services.AddSecurityServices(builder.Configuration);
 builder.Services.AddHttpClients(builder.Configuration.GetSection("Services"));
 builder.Logging.AddSeq(builder.Configuration["Seq"]);
 
+builder.Services.AddAutoMapper(typeof(Order), typeof(OrderDto));
+
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ICheckoutService, CheckoutService.Services.CheckoutService>();
+
 var app = builder.Build();
+
+await app.MigrateDbContext<CheckoutContext>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -27,6 +40,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.AddIdentityMiddleware();
 if (!builder.Environment.IsDevelopment())
 {
     app.UseCustomLag();
