@@ -21,4 +21,6 @@ public class CreateOrderDto
     public string CreditCardNumber { get; set; } = string.Empty;
 
     public DateTimeOffset CreditCardExpiryDate { get; set; }
+
+    public string CreditCardVerificationValue { get; set; } = string.Empty;
 }
