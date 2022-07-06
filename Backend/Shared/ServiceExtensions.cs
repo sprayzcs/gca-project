@@ -94,6 +94,7 @@ public static class ServiceExtensions
             options.AddPolicy(name: "cors", policy =>
             {
                 policy.WithOrigins(configuration["AllowedHosts"]);
+                policy.WithMethods("GET", "POST", "PATCH", "DELETE");
             });
         });
 
