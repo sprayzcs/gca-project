@@ -48,7 +48,11 @@ public class CartService : ICartService
 
     public async Task<CartDto> CreateCart()
     {
-        var cart = new Cart(Guid.NewGuid());
+        var cart = new Cart(Guid.NewGuid())
+        {
+            Active = true
+        };
+
         await _repository.AddAsync(cart);
 
         if (!await _unitOfWork.CommitAsync())

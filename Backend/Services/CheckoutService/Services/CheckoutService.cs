@@ -3,6 +3,7 @@ using CheckoutService.Data;
 using CheckoutService.Infrastructure;
 using Shared;
 using Shared.Data;
+using Shared.Data.Cart;
 using Shared.Data.Checkout;
 using Shared.Data.Shipment;
 using Shared.Infrastructure;
@@ -33,6 +34,7 @@ public class CheckoutService : ICheckoutService
         _notificationHandler = notificationHandler;
         _mapper = mapper;
         _logger = logger;
+
         _cartClient = httpClientFactory.CreateClient(HttpClients.Cart);
         _catalogClient = httpClientFactory.CreateClient(HttpClients.Catalog);
         _shippingClient = httpClientFactory.CreateClient(HttpClients.Shipping);
@@ -79,6 +81,17 @@ public class CheckoutService : ICheckoutService
                 return new();
             }
             totalPrice += productResponseModel.Data.Price;
+        }
+
+        cartResponseModel = await _cartClient.PatchAsJsonAsync<UpdateCartDto, ResponseModel<CartDto>>($"/{cartId}", new UpdateCartDto()
+        {
+            Active = false
+        });
+
+        if (cartResponseModel == null || !cartResponseModel.Success || cartResponseModel.Data == null || cartResponseModel.Data.Active)
+        {
+            _notificationHandler.RaiseError(CheckoutErrors.CouldNotDeactivateCart);
+            return new();
         }
 
         var order = new Order(Guid.NewGuid())
