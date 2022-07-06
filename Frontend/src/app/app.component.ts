@@ -4,6 +4,7 @@ import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { SetupCart } from './store/actions/setup-cart.actions';
 import { CartState } from './store/cart.state';
+import { CartModel } from './util/models/cart/cart.model';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,7 @@ import { CartState } from './store/cart.state';
 export class AppComponent implements OnInit {
   
   @Select(CartState.loading) loading$!: Observable<boolean>;
+  @Select(CartState.itemAmount) itemAmount$!: Observable<number>;
 
   constructor(
     private readonly router: Router,

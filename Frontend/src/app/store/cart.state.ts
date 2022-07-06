@@ -27,6 +27,11 @@ export class CartState {
         return state.cart;
     }
 
+    @Selector()
+    static itemAmount(state: CartStateModel): number {
+        return state.cart?.productIds.length ?? 0;
+    }
+
     constructor(private readonly cartService: CartService) {}
 
     @Action(SetupCart.Start)

@@ -1,13 +1,18 @@
 <div class="wrapper">
+    <div *ngIf="isCartEmpty();else notEmpty">
+        Der Warenkorb ist leer
+    </div>
     <div class="top-button right-buttons">
-        <button nbButton ghost>Warenkorb leeren</button>
-        <button nbButton status="primary">Weiter einkaufen</button>
+        <button nbButton ghost *ngIf="!isCartEmpty()">Warenkorb leeren</button>
+        <button nbButton status="primary" routerLink="/">Weiter einkaufen</button>
     </div>
-    <app-item-list></app-item-list>
-    <app-contact-form></app-contact-form>
-    <div class="order-button right-buttons">
-        <button nbButton status="primary">
-            Kostenpflichtig bestellen
-        </button>
-    </div>
-    </div>
+    <ng-template #notEmpty>
+        <app-item-list [products]="cartProducts"></app-item-list>
+        <app-contact-form *ngIf="cartProducts.length != 0"></app-contact-form>
+        <div class="order-button right-buttons">
+            <button nbButton status="primary">
+                Kostenpflichtig bestellen
+            </button>
+        </div>
+    </ng-template>
+</div>
