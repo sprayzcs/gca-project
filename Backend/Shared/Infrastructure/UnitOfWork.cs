@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Shared.Infrastructure;
 
@@ -14,7 +13,8 @@ public class UnitOfWork : IUnitOfWork
         _context = context;
     }
 
-    public async Task<bool> CommitAsync(bool requireChangesToSuccess = true, CancellationToken cancellationToken = default)
+    public async Task<bool> CommitAsync(bool requireChangesToSuccess = true,
+        CancellationToken cancellationToken = default)
     {
         if (_notificationHandler.HasErrors())
         {
@@ -29,6 +29,5 @@ public class UnitOfWork : IUnitOfWork
 
         _notificationHandler.RaiseError(GenericErrorCodes.CouldNotSave);
         return false;
-
     }
 }

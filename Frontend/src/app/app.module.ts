@@ -29,6 +29,10 @@ import { ReactiveValidationModule } from 'angular-reactive-validation';
 import { ConfirmationComponent } from './routes/confirmation/confirmation.component';
 import { CommonModule } from '@angular/common';
 import { PricePipe } from './util/pipes/price.pipe';
+import { NgxsModule } from '@ngxs/store';
+import { CartState } from './store/cart.state';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 
 @NgModule({
   declarations: [
@@ -49,6 +53,11 @@ import { PricePipe } from './util/pipes/price.pipe';
     ReactiveFormsModule,
     ReactiveValidationModule,
     HttpClientModule,
+    NgxsModule.forRoot([
+      CartState
+    ]),
+    NgxsLoggerPluginModule.forRoot(),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
     NbThemeModule.forRoot({name: 'light'}),
     NbToastrModule.forRoot(),
     NbEvaIconsModule,

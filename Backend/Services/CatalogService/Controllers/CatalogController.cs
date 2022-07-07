@@ -12,21 +12,23 @@ public class CatalogController : BaseController
 {
     private readonly IProductService _service;
 
-    public CatalogController(INotificationHandler notificationHandler, IProductService service) : base(notificationHandler)
+    public CatalogController(INotificationHandler notificationHandler, IProductService service) : base(
+        notificationHandler)
     {
         _service = service;
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<IEnumerable<ProductDto>>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<List<ProductDto>>))]
     public async Task<IActionResult> GetProducts(CancellationToken cancellationToken)
     {
         return Result(await _service.GetProducts(cancellationToken));
     }
 
     [HttpGet("/list")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<IEnumerable<ProductDto>>))]
-    public async Task<IActionResult> GetProductsByIds([FromQuery] IEnumerable<Guid> productIds, CancellationToken cancellationToken)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<List<ProductDto>>))]
+    public async Task<IActionResult> GetProductsByIds([FromQuery] IEnumerable<Guid> productIds,
+        CancellationToken cancellationToken)
     {
         return Result(await _service.GetProductsByIdsAsync(productIds, cancellationToken));
     }

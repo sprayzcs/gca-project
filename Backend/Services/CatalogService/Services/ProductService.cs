@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CatalogService.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Shared;
 using Shared.Data;
 
@@ -15,9 +14,9 @@ public class ProductService : IProductService
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public ProductService(IProductRepository repository,
-                          IMapper mapper,
-                          INotificationHandler notificationHandler,
-                          IHttpContextAccessor httpContextAccessor)
+        IMapper mapper,
+        INotificationHandler notificationHandler,
+        IHttpContextAccessor httpContextAccessor)
     {
         _repository = repository;
         _mapper = mapper;
@@ -35,22 +34,24 @@ public class ProductService : IProductService
             return new();
         }
 
-        return await _mapper.ProjectTo<ProductDto>(product, new { baseUrl = GetBaseUrl() }).FirstAsync(cancellationToken);
+        return await _mapper.ProjectTo<ProductDto>(product, new { baseUrl = GetBaseUrl() })
+            .FirstAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<ProductDto>> GetProductsByIdsAsync(IEnumerable<Guid> productIds, CancellationToken cancellationToken)
+    public Task<List<ProductDto>> GetProductsByIdsAsync(IEnumerable<Guid> productIds,
+        CancellationToken cancellationToken)
     {
-        return _mapper.Map<IEnumerable<ProductDto>>(
-            await _repository
+        return _mapper.ProjectTo<ProductDto>(
+            _repository
                 .GetAllNoTracking()
                 .Where(p => productIds.Contains(p.Id))
-                .ToListAsync(cancellationToken)
-            );
+            , new { baseUrl = GetBaseUrl() }).ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<ProductDto>> GetProducts(CancellationToken cancellationToken)
+    public Task<List<ProductDto>> GetProducts(CancellationToken cancellationToken)
     {
-        return await _mapper.ProjectTo<ProductDto>(_repository.GetAllNoTracking(), new { baseUrl = GetBaseUrl() }).ToListAsync(cancellationToken);
+        return _mapper.ProjectTo<ProductDto>(_repository.GetAllNoTracking(), new { baseUrl = GetBaseUrl() })
+            .ToListAsync(cancellationToken);
     }
 
     private string GetBaseUrl()

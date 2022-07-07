@@ -1,32 +1,17 @@
-<table>
+<table #list>
     <tr class="header">
         <th></th>
         <th>Produkt</th>
         <th class="price">Preis</th>
     </tr>
-    <tr class="product">
-        <td class="image"><img src="assets/placeholder/product-image.webp" /></td>
-        <td class="name">Cooler Computer</td>
-        <td class="price">1999,99 EUR</td>
-    </tr>
-    <tr class="product">
-        <td class="image"><img src="assets/placeholder/product-image.webp" /></td>
-        <td class="name">Cooler Computer</td>
-        <td class="price">1999,99 EUR</td>
-    </tr>
-    <tr class="product">
-        <td class="image"><img src="assets/placeholder/product-image.webp" /></td>
-        <td class="name">Cooler Computer</td>
-        <td class="price">1999,99 EUR</td>
-    </tr>
-    <tr class="product">
-        <td class="image"><img src="assets/placeholder/product-image.webp" /></td>
-        <td class="name">Cooler Computer</td>
-        <td class="price">1999,99 EUR</td>
+    <tr class="product" *ngFor="let product of products">
+        <td class="image"><img [src]="product.image" /></td>
+        <td class="name">{{product.name}}</td>
+        <td class="price">{{product.price | price}}</td>
     </tr>
     <tr class="footer">
         <td></td>
         <td></td>
-        <td class="price">Gesamt: 7999,96 EUR</td>
+        <td class="price">= {{getSummedPrice() | price}}</td>
     </tr>
 </table>

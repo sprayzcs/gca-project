@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { AddToCart } from 'src/app/store/actions/add-to-cart.actions';
 import { ProductModel } from 'src/app/util/models/catalog/product.model';
 
 @Component({
@@ -10,9 +12,13 @@ export class ProductCardComponent implements OnInit {
 
   @Input() product!: ProductModel;
 
-  constructor() { }
+  constructor(private readonly store: Store) { }
 
   ngOnInit(): void {
+  }
+
+  addToCart(productId: string): void {
+    this.store.dispatch(new AddToCart.Start(productId));
   }
 
 }

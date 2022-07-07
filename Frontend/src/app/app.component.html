@@ -2,10 +2,10 @@
   <nb-layout-header>
     <div class="header">
       <img src="assets/logo.png" routerLink="/" />
-      <nb-actions size="medium">
+      <nb-actions size="medium" [nbSpinner]="(loading$ | async)!">
         <nb-action (click)="gotoCart()">
           <nb-icon icon="shopping-cart-outline"></nb-icon>
-          <nb-tag text="12" size="tiny"></nb-tag>
+          <nb-tag [text]="(itemAmount$ | async)!.toString()" size="tiny"></nb-tag>
         </nb-action>
       </nb-actions>
     </div>
