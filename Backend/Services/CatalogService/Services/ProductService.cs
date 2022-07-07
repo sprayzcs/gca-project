@@ -47,9 +47,9 @@ public class ProductService : IProductService
             , new { baseUrl = GetBaseUrl() }).ToListAsync(cancellationToken);
     }
 
-    public Task<List<ProductDto>> GetProducts()
+    public Task<List<ProductDto>> GetProducts(CancellationToken cancellationToken)
     {
-        return _mapper.ProjectTo<ProductDto>(_repository.GetAllNoTracking(), new { baseUrl = GetBaseUrl() }).ToListAsync();
+        return _mapper.ProjectTo<ProductDto>(_repository.GetAllNoTracking(), new { baseUrl = GetBaseUrl() }).ToListAsync(cancellationToken);
     }
 
     private string GetBaseUrl()
