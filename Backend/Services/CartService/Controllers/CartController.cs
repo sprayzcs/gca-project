@@ -13,7 +13,8 @@ public class CartController : BaseController
 {
     private readonly ICartService _cartService;
 
-    public CartController(ICartService cartService, INotificationHandler notificationHandler) : base(notificationHandler)
+    public CartController(ICartService cartService, INotificationHandler notificationHandler) : base(
+        notificationHandler)
     {
         _cartService = cartService;
     }
@@ -52,7 +53,8 @@ public class CartController : BaseController
     [HttpDelete("/{cartId:guid}/{productId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<CartDto>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseModel))]
-    public async Task<IActionResult> RemoveItemFromCart(Guid cartId, Guid productId, CancellationToken cancellationToken)
+    public async Task<IActionResult> RemoveItemFromCart(Guid cartId, Guid productId,
+        CancellationToken cancellationToken)
     {
         return Result(await _cartService.RemoveItemFromCart(cartId, productId, cancellationToken));
     }
@@ -60,7 +62,8 @@ public class CartController : BaseController
     [HttpPatch("/{cartId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<CartDto>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseModel))]
-    public async Task<IActionResult> UpdateCart(Guid cartId, [FromBody] UpdateCartDto cartDto, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateCart(Guid cartId, [FromBody] UpdateCartDto cartDto,
+        CancellationToken cancellationToken)
     {
         return Result(await _cartService.UpdateCart(cartId, cartDto, cancellationToken));
     }

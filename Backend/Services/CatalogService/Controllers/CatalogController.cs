@@ -12,7 +12,8 @@ public class CatalogController : BaseController
 {
     private readonly IProductService _service;
 
-    public CatalogController(INotificationHandler notificationHandler, IProductService service) : base(notificationHandler)
+    public CatalogController(INotificationHandler notificationHandler, IProductService service) : base(
+        notificationHandler)
     {
         _service = service;
     }
@@ -26,7 +27,8 @@ public class CatalogController : BaseController
 
     [HttpGet("/list")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<List<ProductDto>>))]
-    public async Task<IActionResult> GetProductsByIds([FromQuery] IEnumerable<Guid> productIds, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetProductsByIds([FromQuery] IEnumerable<Guid> productIds,
+        CancellationToken cancellationToken)
     {
         return Result(await _service.GetProductsByIdsAsync(productIds, cancellationToken));
     }

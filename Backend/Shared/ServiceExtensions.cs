@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Headers;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +17,8 @@ public static class ServiceExtensions
         return services;
     }
 
-    public static IServiceCollection AddDatabaseContext<TContext>(this IServiceCollection services, string connectionString) where TContext : DbContext
+    public static IServiceCollection AddDatabaseContext<TContext>(this IServiceCollection services,
+        string connectionString) where TContext : DbContext
     {
         services.AddDbContext<TContext>(options =>
         {
@@ -38,7 +38,8 @@ public static class ServiceExtensions
     /// Adds the http clients with important headers, base addresses etc.
     /// Important: Add AFTER the security services has been added
     /// </summary>
-    public static IServiceCollection AddHttpClients(this IServiceCollection services, IConfiguration serviceConfiguration)
+    public static IServiceCollection AddHttpClients(this IServiceCollection services,
+        IConfiguration serviceConfiguration)
     {
         var provider = services.BuildServiceProvider();
         var identityService = provider.GetRequiredService<IIdentityService>();
