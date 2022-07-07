@@ -11,4 +11,14 @@ public static class HttpClientExtensions
 
         return await responseMessage.Content.ReadFromJsonAsync<TResponse>(cancellationToken: cancellationToken);
     }
+
+    public static async Task<TResponse?> PatchAsJsonAsync<TRequest, TResponse>(this HttpClient client, string requestUri, TRequest requst, CancellationToken cancellationToken = default)
+    {
+        var content = JsonContent.Create(requst);
+
+        var responseMessage = await client.PatchAsync(requestUri, content, cancellationToken);
+        responseMessage.EnsureSuccessStatusCode();
+
+        return await responseMessage.Content.ReadFromJsonAsync<TResponse>(cancellationToken: cancellationToken);
+    }
 }
