@@ -18,14 +18,14 @@ public class CatalogController : BaseController
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<IEnumerable<ProductDto>>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<List<ProductDto>>))]
     public async Task<IActionResult> GetProducts(CancellationToken cancellationToken)
     {
         return Result(await _service.GetProducts(cancellationToken));
     }
 
-    [HttpGet("list")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<IEnumerable<ProductDto>>))]
+    [HttpGet("/list")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<List<ProductDto>>))]
     public async Task<IActionResult> GetItemsByIds([FromQuery] IEnumerable<Guid> productIds, CancellationToken cancellationToken)
     {
         return Result(await _service.GetProductsByIdsAsync(productIds, cancellationToken));
