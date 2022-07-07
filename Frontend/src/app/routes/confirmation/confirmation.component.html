@@ -1,46 +1,60 @@
-<div class="wrapper">
-    <app-item-list></app-item-list>
-    <div class="order-information">
-        <div class="details">
-            <h3>Bestelldetails</h3>
-            <table>
-                <tr>
-                    <td>Bestellnummer</td>
-                    <td>234586</td>
-                </tr>
-                <tr>
-                    <td>Versandverfolgung</td>
-                    <td>i2384ty64owirugy3458o7t-89erghu89r</td>
-                </tr>
-            </table>
-        </div>
-        <div class="contact">
-            <h3>Kontaktinformationen</h3>
-            <table>
-                <tr>
-                    <td>E-Mail</td>
-                    <td>hansschmitz@werbde.de</td>
-                </tr>
-                <tr>
-                    <td>Adresse</td>
-                    <td>
-                        Musterstaße 92 <br /> 42314 Musterstadt, Deutschland
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="payment">
-            <h3>Zahlungsinformationen</h3>
-            <table>
-                <tr>
-                    <td>Kartennummer</td>
-                    <td>7344-4564-2467-5534</td>
-                </tr>
-                <tr>
-                    <td>Ablaufdatum</td>
-                    <td>Februar 2024</td>
-                </tr>
-            </table>
+<div *ngIf="loading;else orderCart" [nbSpinner]="true" class="spinner"></div>
+
+<ng-template #orderCart>
+    <div class="wrapper">
+        <app-item-list [products]="products" [nbSpinner]="loadingCart"></app-item-list>
+        <div class="order-information">
+            <div class="details">
+                <h3>Bestelldetails</h3>
+                <table>
+                    <tr>
+                        <td>Bestellnummer</td>
+                        <td>{{order?.id}}</td>
+                    </tr>
+                    <tr *ngIf="!shipment;else shipmentInfo">
+                        <td>Versand</td>
+                        <td>Fehler beim Übertragen der Details an den Versanddienstleister. Bitte melden Sie sich bei dem Support.</td>
+                    </tr>
+                    <ng-template #shipmentInfo>
+                        <tr>
+                            <td>Versandverfolgung</td>
+                            <td>{{shipment?.trackingNumber}}</td>
+                        </tr>
+                        <tr>
+                            <td>Ausgeliefert</td>
+                            <td>{{shipment?.fulfilled}}</td>
+                        </tr>
+                    </ng-template>
+                </table>
+            </div>
+            <div class="contact">
+                <h3>Kontaktinformationen</h3>
+                <table>
+                    <tr>
+                        <td>E-Mail</td>
+                        <td>hansschmitz@werbde.de</td>
+                    </tr>
+                    <tr>
+                        <td>Adresse</td>
+                        <td>
+                            {{order?.street}} <br /> {{order?.zipcode}} {{order?.city}}, {{order?.country}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="payment">
+                <h3>Zahlungsinformationen</h3>
+                <table>
+                    <tr>
+                        <td>Kartennummer</td>
+                        <td>{{order?.creditCardNumber}}</td>
+                    </tr>
+                    <tr>
+                        <td>Ablaufdatum</td>
+                        <td>{{ order?.creditCardExpiryDate | date: 'MMMM yyyy' }}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+</ng-template>

@@ -14,7 +14,7 @@ const routes: Routes = [
     component: CartComponent
   },
   {
-    path: 'confirmation/:id',
+    path: 'confirmation/:orderId',
     component: ConfirmationComponent
   }
 ];

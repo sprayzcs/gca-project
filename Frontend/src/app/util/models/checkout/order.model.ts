@@ -3,7 +3,7 @@ export type OrderModel = {
     date: Date
 
     cartId: string
-    shipmentId: string
+    shipmentId?: string
 
     country: string
     city: string
