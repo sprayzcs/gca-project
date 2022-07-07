@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-push-shippinh:
+  build-push-shipping:
     runs-on: ubuntu-latest
     steps:
       -
