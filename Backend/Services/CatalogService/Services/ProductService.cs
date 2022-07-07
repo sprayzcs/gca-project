@@ -49,7 +49,7 @@ public class ProductService : IProductService
             );
     }
 
-    public async Task<ICollection<ProductDto>> GetProducts()
+    public async Task<IEnumerable<ProductDto>> GetProducts()
     {
         return await _mapper.ProjectTo<ProductDto>(_repository.GetAllNoTracking(), new { baseUrl = GetBaseUrl() }).ToListAsync();
     }

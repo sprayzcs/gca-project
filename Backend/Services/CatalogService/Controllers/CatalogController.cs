@@ -18,22 +18,24 @@ public class CatalogController : BaseController
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ICollection<ProductDto>))]
-    public async Task<IActionResult> GetItems()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<IEnumerable<ProductDto>>))]
+    public async Task<IActionResult> GetProducts()
     {
         return Result(await _service.GetProducts());
     }
 
     [HttpGet("/list")]
-    public async Task<IActionResult> GetItemsByIds([FromQuery] IEnumerable<Guid> productIds, CancellationToken cancellationToken)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<IEnumerable<ProductDto>>))]
+    public async Task<IActionResult> GetProductsByIds([FromQuery] IEnumerable<Guid> productIds, CancellationToken cancellationToken)
     {
         return Result(await _service.GetProductsByIdsAsync(productIds, cancellationToken));
     }
 
     [HttpGet]
     [Route("/{id:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
-    public async Task<IActionResult> GetItem([FromRoute] Guid id)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<ProductDto>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseModel))]
+    public async Task<IActionResult> GetProduct([FromRoute] Guid id)
     {
         return Result(await _service.GetProduct(id));
     }
