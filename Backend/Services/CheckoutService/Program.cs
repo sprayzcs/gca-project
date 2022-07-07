@@ -18,6 +18,7 @@ builder.Services.AddDatabaseContext<CheckoutContext>(builder.Configuration["Conn
 builder.Services.AddNotificationHandler();
 builder.Services.AddSecurityServices(builder.Configuration);
 builder.Services.AddHttpClients(builder.Configuration.GetSection("Services"));
+builder.Services.AddDefaultCors(builder.Configuration);
 builder.Logging.AddSeq(builder.Configuration["Seq"]);
 
 builder.Services.AddAutoMapper(typeof(Order), typeof(OrderDto));
@@ -33,6 +34,7 @@ await app.MigrateDbContext<CheckoutContext>();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseCors("cors");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
