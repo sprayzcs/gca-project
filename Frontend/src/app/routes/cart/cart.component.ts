@@ -5,6 +5,7 @@ import { FailAction } from 'src/app/store/actions/base.actions';
 import { Checkout } from 'src/app/store/actions/checkout.actions';
 import { ClearCart } from 'src/app/store/actions/clear-cart.actions';
 import { CartState } from 'src/app/store/cart.state';
+import { CheckoutState } from 'src/app/store/checkout.state';
 import { BackendService } from 'src/app/util/enums/services.enum';
 import { CartModel } from 'src/app/util/models/cart/cart.model';
 import { ProductModel } from 'src/app/util/models/catalog/product.model';
@@ -20,6 +21,7 @@ import { ContactFormComponent } from './components/contact-form/contact-form.com
 export class CartComponent implements OnInit, OnDestroy {
 
   @Select(CartState.loading) loadingCart$!: Observable<boolean>;
+  @Select(CheckoutState.loading) loadingCheckout$!: Observable<boolean>;
 
   @ViewChild('form') form!: ContactFormComponent;
 

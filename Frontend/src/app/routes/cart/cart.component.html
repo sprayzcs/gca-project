@@ -1,5 +1,5 @@
 <div class="wrapper">
-  <div *ngIf="loading || (loadingCart$ | async); else cart" [nbSpinner]="true" class="spinner"></div>
+  <div *ngIf="loading || (loadingCart$ | async) || (loadingCheckout$ | async); else cart" [nbSpinner]="true" class="spinner"></div>
   <ng-template #cart>
     <div class="top-button right-buttons">
       <button nbButton ghost *ngIf="!isCartEmpty()" (click)="clearCart()">
@@ -12,7 +12,7 @@
       <app-item-list [products]="cartProducts"></app-item-list>
       <app-contact-form #form *ngIf="cartProducts.length != 0"></app-contact-form>
       <div class="order-button right-buttons">
-        <button nbButton status="primary" (click)="order()">Kostenpflichtig bestellen</button>
+        <button nbButton status="primary" (click)="order()" [disabled]="loadingCheckout$ | async">Kostenpflichtig bestellen</button>
       </div>
     </ng-template>
   </ng-template>

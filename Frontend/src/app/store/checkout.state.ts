@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { NbGlobalPhysicalPosition, NbToastrService } from "@nebular/theme";
-import { Action, State, StateContext } from "@ngxs/store";
+import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { BackendService } from "../util/enums/services.enum";
 import { CreateOrderModel } from "../util/models/checkout/create-order.model";
 import { OrderModel } from "../util/models/checkout/order.model";
@@ -20,6 +20,11 @@ import { CheckoutStateModel } from "./models/checkout-state.model";
 })
 export class CheckoutState {
     
+    @Selector()
+    static loading(state: CheckoutStateModel): boolean {
+        return state.loadingOperations > 0;
+    }
+
     constructor(
         private readonly apiResponseService: ApiResponseService,
         private readonly toastrService: NbToastrService,
@@ -52,6 +57,7 @@ export class CheckoutState {
     @Action(Checkout.Success)
     clearCartSuccess(context: StateContext<CheckoutStateModel>, action: Checkout.Success): void {
         this.patchLoadingOperations(context, -1);
+        this.router.navigate(['confirmation', action.order.id]);
         this.toastrService.success(
             '',
             'Warenkorb wurde bestellt',
@@ -61,7 +67,6 @@ export class CheckoutState {
                 hasIcon: true,
                 icon: 'shopping-cart-outline'
             });
-        this.router.navigate(['confirmation', action.order.id]);
     }
 
     private patchLoadingOperations(context: StateContext<CheckoutStateModel>, by: number): void {
