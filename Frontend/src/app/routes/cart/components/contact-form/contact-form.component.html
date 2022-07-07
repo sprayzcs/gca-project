@@ -2,7 +2,7 @@
     <div>
         <h4>Kontakt</h4>
         <input nbInput placeholder="E-Mail" formControlName="email" fullWidth />
-        <arv-validation-message for="email"></arv-validation-message>
+        <arv-validation-messages [for]="['email']"></arv-validation-messages>
     </div>
 
     <div formGroupName="contact" class="formGroup">
