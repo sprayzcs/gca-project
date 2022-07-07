@@ -10,9 +10,9 @@
     <div *ngIf="isCartEmpty(); else notEmpty">Der Warenkorb ist leer</div>
     <ng-template #notEmpty>
       <app-item-list [products]="cartProducts"></app-item-list>
-      <app-contact-form *ngIf="cartProducts.length != 0"></app-contact-form>
+      <app-contact-form #form *ngIf="cartProducts.length != 0"></app-contact-form>
       <div class="order-button right-buttons">
-        <button nbButton status="primary">Kostenpflichtig bestellen</button>
+        <button nbButton status="primary" (click)="order()">Kostenpflichtig bestellen</button>
       </div>
     </ng-template>
   </ng-template>

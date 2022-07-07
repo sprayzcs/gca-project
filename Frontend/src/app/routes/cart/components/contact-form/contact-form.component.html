@@ -39,7 +39,7 @@
                     {{i + currentYear}}
                 </nb-option>
             </nb-select>
-            <input nbInput placeholder="CVV" formControlName="cvv" fullWidth type="number" />
+            <input nbInput placeholder="CVV" formControlName="cvv" fullWidth type="text" />
         </div>
         <arv-validation-messages [for]="['creditCardNumber', 'month', 'year', 'cvv']"></arv-validation-messages>
     </div>
