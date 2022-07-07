@@ -11,20 +11,27 @@
                         <td>Bestellnummer</td>
                         <td>{{order?.id}}</td>
                     </tr>
-                    <tr *ngIf="!shipment;else shipmentInfo">
+                    <tr *ngIf="!shipmentInitialized">
+
+                    </tr>
+                    <tr *ngIf="shipmentInitialized && !shipment">
                         <td>Versand</td>
                         <td>Fehler beim Übertragen der Details an den Versanddienstleister. Bitte melden Sie sich bei dem Support.</td>
                     </tr>
-                    <ng-template #shipmentInfo>
+                    <tbody *ngIf="shipmentInitialized && shipment">
                         <tr>
                             <td>Versandverfolgung</td>
                             <td>{{shipment?.trackingNumber}}</td>
                         </tr>
                         <tr>
+                            <td>Versandkosten</td>
+                            <td>{{shipment?.price | price}}</td>
+                        </tr>
+                        <tr>
                             <td>Ausgeliefert</td>
                             <td>{{shipment?.fulfilled}}</td>
                         </tr>
-                    </ng-template>
+                    </tbody>
                 </table>
             </div>
             <div class="contact">

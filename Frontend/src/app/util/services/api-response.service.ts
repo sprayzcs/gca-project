@@ -76,7 +76,7 @@ export class ApiResponseService {
                 }
                 this.store.dispatch(failAction(error?.error?.error ?? []));
                 onFinish();
-                return throwError(() => new Error(`Get request failed.`));
+                return throwError(() => new Error(`Request failed.`));
             }),
             map((response: ApiResponseModel<TResponse>) => {
                 if(!response.success){

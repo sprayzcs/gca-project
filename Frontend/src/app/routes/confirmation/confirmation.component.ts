@@ -22,8 +22,10 @@ export class ConfirmationComponent implements OnInit {
   loadingShipping: boolean = false;
   orderId: string = '';
   order?: OrderModel;
-  shipment?: ShipmentModel;
   products: ProductModel[] = [];
+
+  shipmentInitialized = false;
+  shipment?: ShipmentModel;
 
   constructor(
     private readonly apiResponseService: ApiResponseService,
@@ -89,17 +91,19 @@ export class ConfirmationComponent implements OnInit {
     this.apiResponseService.resolveGet<ShipmentModel>(
       BackendService.Shipping,
       `${shippingId}`,
-      () => this.loadingShipping = true,
+      () => {this.loadingShipping = true; this.shipmentInitialized = true;},
       errors => new FailAction(errors),
       false
     ).subscribe(shipment => {
       if(!shipment){
-        this.loading = false;
+        this.loadingShipping = false;
+        this.shipmentInitialized = true;
         return;
       }
 
       this.shipment = shipment;
       this.loadingShipping = false;
+      this.shipmentInitialized = true;
     });
   }
 
