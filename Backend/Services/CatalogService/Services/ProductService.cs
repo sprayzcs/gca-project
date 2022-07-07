@@ -25,18 +25,17 @@ public class ProductService : IProductService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<ProductDto> GetProduct(Guid id)
+    public async Task<ProductDto> GetProduct(Guid id, CancellationToken cancellationToken)
     {
         var product = _repository.GetByIdAsQueryable(id);
 
-        if (!await product.AnyAsync())
+        if (!await product.AnyAsync(cancellationToken))
         {
             _notificationHandler.RaiseError(GenericErrorCodes.ObjectNotFound);
             return new();
         }
 
-
-        return await _mapper.ProjectTo<ProductDto>(product, new { baseUrl = GetBaseUrl() }).FirstAsync();
+        return await _mapper.ProjectTo<ProductDto>(product, new { baseUrl = GetBaseUrl() }).FirstAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<ProductDto>> GetProductsByIdsAsync(IEnumerable<Guid> productIds, CancellationToken cancellationToken)
@@ -49,9 +48,9 @@ public class ProductService : IProductService
             );
     }
 
-    public async Task<IEnumerable<ProductDto>> GetProducts()
+    public async Task<IEnumerable<ProductDto>> GetProducts(CancellationToken cancellationToken)
     {
-        return await _mapper.ProjectTo<ProductDto>(_repository.GetAllNoTracking(), new { baseUrl = GetBaseUrl() }).ToListAsync();
+        return await _mapper.ProjectTo<ProductDto>(_repository.GetAllNoTracking(), new { baseUrl = GetBaseUrl() }).ToListAsync(cancellationToken);
     }
 
     private string GetBaseUrl()

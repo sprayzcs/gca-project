@@ -10,8 +10,8 @@ public class CartRepository : Repository<Cart>, ICartRepository
     {
     }
 
-    public override Task<Cart?> GetByIdAsync(Guid id)
+    public override Task<Cart?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return _dbSet.Include(c => c.Products).Where(c => c.Id == id).FirstOrDefaultAsync();
+        return _dbSet.Include(c => c.Products).Where(c => c.Id == id).FirstOrDefaultAsync(cancellationToken);
     }
 }

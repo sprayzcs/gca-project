@@ -20,9 +20,9 @@ public class CheckoutController : BaseController
     [HttpGet("/{orderId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<OrderDto>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseModel))]
-    public async Task<IActionResult> GetOrderById(Guid orderId)
+    public async Task<IActionResult> GetOrderById(Guid orderId, CancellationToken cancellationToken)
     {
-        return Result(await _checkoutService.GetOrderById(orderId));
+        return Result(await _checkoutService.GetOrderById(orderId, cancellationToken));
     }
 
     [HttpPost("/")]

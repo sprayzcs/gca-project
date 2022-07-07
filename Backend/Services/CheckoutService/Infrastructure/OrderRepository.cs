@@ -10,8 +10,8 @@ public class OrderRepository : Repository<Order>, IOrderRepository
     {
     }
 
-    public Task<bool> HasCartAlreadyBeenOrdered(Guid cartId)
+    public Task<bool> HasCartAlreadyBeenOrdered(Guid cartId, CancellationToken cancellationToken)
     {
-        return _dbSet.AnyAsync(o => o.CartId == cartId);
+        return _dbSet.AnyAsync(o => o.CartId == cartId, cancellationToken);
     }
 }

@@ -40,9 +40,9 @@ public class CheckoutService : ICheckoutService
         _shippingClient = httpClientFactory.CreateClient(HttpClients.Shipping);
     }
 
-    public async Task<OrderDto> GetOrderById(Guid orderId)
+    public async Task<OrderDto> GetOrderById(Guid orderId, CancellationToken cancellationToken)
     {
-        var order = await _repository.GetByIdAsync(orderId);
+        var order = await _repository.GetByIdAsync(orderId, cancellationToken);
 
         if (order == null)
         {

@@ -33,9 +33,9 @@ public class CartService : ICartService
         _securedMethodService = securedMethodService;
     }
 
-    public async Task<CartDto> GetCart(Guid cartId)
+    public async Task<CartDto> GetCart(Guid cartId, CancellationToken cancellationToken)
     {
-        var cart = await _repository.GetByIdAsync(cartId);
+        var cart = await _repository.GetByIdAsync(cartId, cancellationToken);
 
         if (cart == null)
         {
@@ -46,16 +46,16 @@ public class CartService : ICartService
         return _mapper.Map<CartDto>(cart);
     }
 
-    public async Task<CartDto> CreateCart()
+    public async Task<CartDto> CreateCart(CancellationToken cancellationToken)
     {
         var cart = new Cart(Guid.NewGuid())
         {
             Active = true
         };
 
-        await _repository.AddAsync(cart);
+        await _repository.AddAsync(cart, cancellationToken);
 
-        if (!await _unitOfWork.CommitAsync())
+        if (!await _unitOfWork.CommitAsync(cancellationToken))
         {
             return new();
         }
@@ -63,9 +63,9 @@ public class CartService : ICartService
         return _mapper.Map<CartDto>(cart);
     }
 
-    public async Task<CartDto> AddItemToCart(Guid cartId, Guid productId)
+    public async Task<CartDto> AddItemToCart(Guid cartId, Guid productId, CancellationToken cancellationToken)
     {
-        Cart? cart = await _repository.GetByIdAsync(cartId);
+        Cart? cart = await _repository.GetByIdAsync(cartId, cancellationToken);
 
         if (cart == null)
         {
@@ -91,10 +91,10 @@ public class CartService : ICartService
             Cart = cart
         };
 
-        await _cartProductRepository.AddAsync(cartProduct);
+        await _cartProductRepository.AddAsync(cartProduct, cancellationToken);
         cart.Products.Add(cartProduct);
 
-        if (!await _unitOfWork.CommitAsync())
+        if (!await _unitOfWork.CommitAsync(cancellationToken))
         {
             return new();
         }
@@ -102,9 +102,9 @@ public class CartService : ICartService
         return _mapper.Map<CartDto>(cart);
     }
 
-    public async Task<CartDto> RemoveItemFromCart(Guid cartId, Guid productId)
+    public async Task<CartDto> RemoveItemFromCart(Guid cartId, Guid productId, CancellationToken cancellationToken)
     {
-        Cart? cart = await _repository.GetByIdAsync(cartId);
+        Cart? cart = await _repository.GetByIdAsync(cartId, cancellationToken);
 
         if (cart == null)
         {
@@ -128,7 +128,7 @@ public class CartService : ICartService
         cart.Products.Remove(cartProduct);
         _cartProductRepository.Remove(cartProduct);
 
-        if (!await _unitOfWork.CommitAsync())
+        if (!await _unitOfWork.CommitAsync(cancellationToken))
         {
             return new();
         }
@@ -136,9 +136,9 @@ public class CartService : ICartService
         return _mapper.Map<CartDto>(cart);
     }
 
-    public async Task<CartDto> UpdateCart(Guid cartId, UpdateCartDto cartDto)
+    public async Task<CartDto> UpdateCart(Guid cartId, UpdateCartDto cartDto, CancellationToken cancellationToken)
     {
-        Cart? cart = await _repository.GetByIdAsync(cartId);
+        Cart? cart = await _repository.GetByIdAsync(cartId, cancellationToken);
 
         if (cart == null)
         {
@@ -177,7 +177,7 @@ public class CartService : ICartService
                     {
                         ProductId = productId
                     };
-                    await _cartProductRepository.AddAsync(cartProduct);
+                    await _cartProductRepository.AddAsync(cartProduct, cancellationToken);
                     cart.Products.Add(cartProduct);
                 }
             }
@@ -194,7 +194,7 @@ public class CartService : ICartService
             cart.Active = cartDto.Active.Value;
         }
 
-        if (!await _unitOfWork.CommitAsync(false))
+        if (!await _unitOfWork.CommitAsync(false, cancellationToken))
         {
             return new();
         }
@@ -202,9 +202,9 @@ public class CartService : ICartService
         return _mapper.Map<CartDto>(cart);
     }
 
-    public async Task<int> GetCartItemCount(Guid cartId)
+    public async Task<int> GetCartItemCount(Guid cartId, CancellationToken cancellationToken)
     {
-        Cart? cart = await _repository.GetByIdAsync(cartId);
+        Cart? cart = await _repository.GetByIdAsync(cartId, cancellationToken);
         if (cart == null)
         {
             _notificationHandler.RaiseError(GenericErrorCodes.ObjectNotFound);

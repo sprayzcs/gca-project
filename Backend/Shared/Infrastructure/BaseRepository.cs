@@ -13,9 +13,9 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
         _dbSet = _dbContext.Set<TEntity>();
     }
 
-    public async Task<TEntity> AddAsync(TEntity entity)
+    public async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken)
     {
-        await _dbSet.AddAsync(entity);
+        await _dbSet.AddAsync(entity, cancellationToken);
 
         return entity;
     }
@@ -36,7 +36,7 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
         return _dbSet.AsNoTracking();
     }
 
-    public virtual Task<TEntity?> GetByIdAsync(Guid id)
+    public virtual Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return _dbSet.FindAsync(id).AsTask();
     }
@@ -47,7 +47,7 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
             _dbContext.Dispose();
     }
 
-    public virtual async Task RemoveAsync(Guid id)
+    public virtual async Task RemoveAsync(Guid id, CancellationToken cancellationToken)
     {
         TEntity? entity = await _dbSet.FindAsync(id);
         if (entity == null)
@@ -63,9 +63,9 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
         _dbSet.Remove(entity);
     }
 
-    public virtual Task<TEntity> UpdateAsync(TEntity entity)
+    public virtual TEntity Update(TEntity entity)
     {
         _dbSet.Update(entity);
-        return Task.FromResult(entity);
+        return entity;
     }
 }

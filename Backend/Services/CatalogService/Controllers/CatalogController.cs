@@ -19,9 +19,9 @@ public class CatalogController : BaseController
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<IEnumerable<ProductDto>>))]
-    public async Task<IActionResult> GetProducts()
+    public async Task<IActionResult> GetProducts(CancellationToken cancellationToken)
     {
-        return Result(await _service.GetProducts());
+        return Result(await _service.GetProducts(cancellationToken));
     }
 
     [HttpGet("/list")]
@@ -35,8 +35,8 @@ public class CatalogController : BaseController
     [Route("/{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<ProductDto>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseModel))]
-    public async Task<IActionResult> GetProduct([FromRoute] Guid id)
+    public async Task<IActionResult> GetProduct([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        return Result(await _service.GetProduct(id));
+        return Result(await _service.GetProduct(id, cancellationToken));
     }
 }

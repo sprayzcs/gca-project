@@ -33,7 +33,7 @@ public class ShippingService : IShippingService
         _mapper = mapper;
     }
 
-    public async Task<ShipmentDto> CreateShipmentForOrderAsync(Guid orderId, int orderPrice)
+    public async Task<ShipmentDto> CreateShipmentForOrderAsync(Guid orderId, int orderPrice, CancellationToken cancellationToken)
     {
         if (!_securedMethodService.CanAccess())
         {
@@ -41,7 +41,7 @@ public class ShippingService : IShippingService
             return new();
         }
 
-        var existingShipment = await _shippingRepository.GetByOrderIdAsync(orderId);
+        var existingShipment = await _shippingRepository.GetByOrderIdAsync(orderId, cancellationToken);
         if (existingShipment != null)
         {
             _notificationHandler.RaiseError(ShippingErrors.ShipmentAlreadyExists);
@@ -56,9 +56,9 @@ public class ShippingService : IShippingService
 
         var shipmentNumber = GenerateShipmentNumber();
         var shipment = new Shipment(Guid.NewGuid(), orderId, shipmentNumber, shippingPrice);
-        await _shippingRepository.AddAsync(shipment);
+        await _shippingRepository.AddAsync(shipment, cancellationToken);
 
-        if (!await _unitOfWork.CommitAsync())
+        if (!await _unitOfWork.CommitAsync(cancellationToken))
         {
             return new();
         }
@@ -66,9 +66,9 @@ public class ShippingService : IShippingService
         return _mapper.Map<ShipmentDto>(shipment);
     }
 
-    public async Task<ShipmentDto> GetShipmentByIdAsync(Guid shipmentId)
+    public async Task<ShipmentDto> GetShipmentByIdAsync(Guid shipmentId, CancellationToken cancellationToken)
     {
-        var shipment = await _shippingRepository.GetByIdAsync(shipmentId);
+        var shipment = await _shippingRepository.GetByIdAsync(shipmentId, cancellationToken);
         if (shipment == null)
         {
             _notificationHandler.RaiseError(GenericErrorCodes.ObjectNotFound);
