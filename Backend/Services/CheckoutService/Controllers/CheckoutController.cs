@@ -27,7 +27,7 @@ public class CheckoutController : BaseController
 
     [HttpPost("/")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<OrderDto>))]
-    public async Task<IActionResult> CreateOrderFromCart(CreateOrderDto createOrderDto)
+    public async Task<IActionResult> CreateOrderFromCart([FromBody] CreateOrderDto createOrderDto)
     {
         return Result(await _checkoutService.CreateOrderFromCart(createOrderDto));
     }

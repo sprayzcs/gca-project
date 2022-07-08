@@ -33,6 +33,7 @@ import { NgxsModule } from '@ngxs/store';
 import { CartState } from './store/cart.state';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { CheckoutState } from './store/checkout.state';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
     ReactiveValidationModule,
     HttpClientModule,
     NgxsModule.forRoot([
-      CartState
+      CartState,
+      CheckoutState,
     ]),
     NgxsLoggerPluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),

@@ -9,6 +9,7 @@ import { ApiResponseService } from "../util/services/api-response.service";
 import { CartService } from "../util/services/cart.service";
 import { AddToCart } from "./actions/add-to-cart.actions";
 import { ClearCart } from "./actions/clear-cart.actions";
+import { RemoveCard } from "./actions/remove-card.actions";
 import { SetupCart } from "./actions/setup-cart.actions";
 import { CartStateModel } from "./models/cart-state.model";
 
@@ -168,6 +169,16 @@ export class CartState {
                 hasIcon: true,
                 icon: 'shopping-cart-outline'
             });
+    }
+
+    @Action(RemoveCard.Start)
+    removeCart(context: StateContext<CartStateModel>): void {
+        localStorage.removeItem("cartId");
+        context.patchState({
+            cart: undefined
+        });
+
+        context.dispatch(new SetupCart.Start());
     }
 
     private patchLoadingOperations(context: StateContext<CartStateModel>, by: number): void {

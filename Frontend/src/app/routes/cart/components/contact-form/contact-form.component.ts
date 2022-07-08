@@ -17,7 +17,6 @@ export class ContactFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.formGroup = this.formBuilder.group({
       email: new FormControl<string>('', [Validators.required('E-Mail muss angegeben werden'), Validators.email('E-Mail muss im Email Format sein')]),
       contact: this.formBuilder.group({
@@ -30,9 +29,48 @@ export class ContactFormComponent implements OnInit {
         creditCardNumber: new FormControl<string>('', [Validators.required('Kreditkarten Nummer muss angegeben werden')]),
         month: new FormControl<number>(null!, [Validators.required('Monat muss angegeben werden')]),
         year: new FormControl<number>(null!, [Validators.required('Jahr muss angegeben werden')]),
-        cvv: new FormControl<number>(null!, [Validators.required('CVV muss angegeben werden'), Validators.min(100, 'CVV muss eine dreistellige Zahl sein'), Validators.max(999, 'CVV muss eine dreistellige Zahl sein')]),
+        cvv: new FormControl<string>('', [Validators.required('CVV muss angegeben werden'), Validators.pattern('\\d{3}', 'CVV muss eine dreistellige Zahl sein')]),
       })
     });
+  }
+
+  get isValid(): boolean {
+    return this.formGroup.valid;
+  }
+
+  get email(): string {
+    return this.formGroup.get(['email'])?.value;
+  }
+
+  get street(): string {
+    return this.formGroup.get(['contact', 'street'])?.value;
+  }
+
+  get zipCode(): string {
+    return this.formGroup.get(['contact', 'zipCode'])?.value;
+  }
+
+  get city(): string {
+    return this.formGroup.get(['contact', 'city'])?.value;
+  }
+
+  get country(): string {
+    return this.formGroup.get(['contact', 'country'])?.value;
+  }
+
+  get creditCardNumber(): string {
+    return this.formGroup.get(['payment', 'creditCardNumber'])?.value;
+  }
+
+  get creditCardExpiryDate(): Date {
+    return new Date(
+      this.formGroup.get(['payment', 'year'])?.value,
+      this.formGroup.get(['payment', 'month'])?.value,
+    )
+  }
+
+  get creditCardCvv(): string {
+    return this.formGroup.get(['payment', 'cvv'])?.value;
   }
 
 }
