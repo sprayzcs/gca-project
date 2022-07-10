@@ -1,4 +1,5 @@
-﻿using CartService.Data;
+﻿using System.Reflection;
+using CartService.Data;
 using CartService.Infrastructure;
 using CartService.Model;
 using CartService.Services;
@@ -12,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerWithXML(Assembly.GetExecutingAssembly().GetName().Name);
 
 builder.Services.AddDatabaseContext<CartContext>(builder.Configuration["ConnectionString"]);
 builder.Services.AddNotificationHandler();
