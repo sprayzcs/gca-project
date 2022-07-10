@@ -44,6 +44,7 @@ public class CheckoutController : BaseController
     ///     - INVALID_CART: Cart could not be retrieved from cart service
     ///     - INVALID_PRODUCT: One product could not be retrieved from catalog service
     ///     - COULD_NOT_DEACTIVATE_CART: Cart could not be deactivated
+    ///     - COULD_NOT_SAVE: Error occured while saving the changes
     ///     - (ShipmentId is null): Order was placed, but the creation of shipment failed
     /// </remarks>
     [HttpPost("/")]

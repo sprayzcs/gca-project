@@ -42,6 +42,7 @@ public class ShippingController : BaseController
     ///     Possible errors thrown by this endpoint:
     ///     - INSUFFICIENT_PERMISSIONS: An unauthorized service (or a user in general) tried to access this endpoint
     ///     - SHIPMENT_ALREADY_EXISTS: There is already a shipment for the provided orderId
+    ///     - COULD_NOT_SAVE: Error occured while saving the changes
     /// </remarks>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<ShipmentDto>))]

@@ -56,7 +56,7 @@ public class CartController : BaseController
     /// </summary>
     /// <remarks>
     ///     Possible errors thrown by this endpoint:
-    ///     - None
+    ///     - COULD_NOT_SAVE: Error occured while saving the changes
     /// </remarks>
     [HttpPost("/")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<CartDto>))]
@@ -75,6 +75,7 @@ public class CartController : BaseController
     ///     - OBJECT_NOT_FOUND: There is no cart identified by the provided id
     ///     - CART_DEACTIVATED: The cart was already ordered
     ///     - PRODUCT_ALREADY_IN_CART: The product provided in <paramref name="productId" /> is already in the cart
+    ///     - COULD_NOT_SAVE: Error occured while saving the changes
     /// </remarks>
     [HttpPatch("/{cartId:guid}/{productId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<CartDto>))]
@@ -94,6 +95,7 @@ public class CartController : BaseController
     ///     - OBJECT_NOT_FOUND: There is no cart identified by the provided id
     ///     - CART_DEACTIVATED: The cart was already ordered
     ///     - PRODUCT_NOT_IN_CART: The product provided in <paramref name="productId" /> is not in the cart
+    ///     - COULD_NOT_SAVE: Error occured while saving the changes
     /// </remarks>
     [HttpDelete("/{cartId:guid}/{productId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<CartDto>))]
