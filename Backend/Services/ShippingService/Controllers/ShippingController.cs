@@ -25,6 +25,13 @@ public class ShippingController : BaseController
         return Result(await _shippingService.GetShipmentByIdAsync(shipmentId, cancellationToken));
     }
 
+    [HttpGet("estimate/{orderAmount:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<int>))]
+    public async Task<IActionResult> GetShippingEstimate(int orderAmount)
+    {
+        return Result(await _shippingService.EstimateShippingPriceAsync(orderAmount));
+    }
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
     public async Task<IActionResult> CreateShipping([FromBody] CreateShipmentDto request, CancellationToken cancellationToken)

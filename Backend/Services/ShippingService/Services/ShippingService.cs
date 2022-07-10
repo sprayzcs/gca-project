@@ -48,11 +48,7 @@ public class ShippingService : IShippingService
             return new();
         }
 
-        int shippingPrice = 0;
-        if (orderPrice <= 10000)
-        {
-            shippingPrice = 1000;
-        }
+        var shippingPrice = CalculateShippingPrice(orderPrice);
 
         var shipmentNumber = GenerateShipmentNumber();
         var shipment = new Shipment(Guid.NewGuid(), orderId, shipmentNumber, shippingPrice);
@@ -76,6 +72,16 @@ public class ShippingService : IShippingService
         }
 
         return _mapper.Map<ShipmentDto>(shipment);
+    }
+
+    public async Task<int> EstimateShippingPriceAsync(int orderPrice)
+    {
+        return CalculateShippingPrice(orderPrice);
+    }
+
+    private static int CalculateShippingPrice(int orderPrice)
+    {
+        return orderPrice <= 100_00 ? 10_00 : 0_00;
     }
 
     private static string GenerateShipmentNumber()
