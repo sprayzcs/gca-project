@@ -9,6 +9,7 @@ import { ProductModel } from 'src/app/util/models/catalog/product.model';
 export class ItemListComponent implements OnInit {
 
   @Input() products: ProductModel[] = [];
+  @Input() shipping = -1;
 
   constructor() { }
 
@@ -16,7 +17,9 @@ export class ItemListComponent implements OnInit {
   }
 
   getSummedPrice(): number {
-    return this.products.map(p => p.price).reduce((prev, current) => prev + current, 0);
+    return this.products
+      .map(p => p.price)
+      .reduce((prev, current) => prev + current, 0) + (this.shipping > 0 ? this.shipping : 0);
   }
 
 }

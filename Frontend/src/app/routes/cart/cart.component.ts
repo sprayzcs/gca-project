@@ -26,8 +26,10 @@ export class CartComponent implements OnInit, OnDestroy {
   @ViewChild('form') form!: ContactFormComponent;
 
   loading = false;
+  loadingShipping = false;
   cartId: string = '';
   cartProducts: ProductModel[] = [];
+  shippingPrice = -1;
   
   private onDestroy$: Subject<void> = new Subject<void>();
 
@@ -49,6 +51,7 @@ export class CartComponent implements OnInit, OnDestroy {
       }
     
       this.loadCartItems(cart);
+      this.loadShippingPrice(cart);
       this.cartId = cart.id;
     })
   }
@@ -86,6 +89,21 @@ export class CartComponent implements OnInit, OnDestroy {
           this.cartProducts = products;
         }
       });
+  }
+
+  loadShippingPrice(cart: CartModel){
+    this.loadingShipping = true;
+
+    this.apiResponse.resolveGet<number>(
+      BackendService.Checkout,
+      `shipping/${cart.id}`,
+      () => this.loadingShipping = false,
+      () => new FailAction([]),
+    ).subscribe(shippingPrice => {
+      if(shippingPrice){
+        this.shippingPrice = shippingPrice;
+      }
+    })
   }
 
   isCartEmpty(): boolean {
