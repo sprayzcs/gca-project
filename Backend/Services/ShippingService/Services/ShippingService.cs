@@ -74,7 +74,7 @@ public class ShippingService : IShippingService
         return _mapper.Map<ShipmentDto>(shipment);
     }
 
-    public async Task<int> EstimateShippingPriceAsync(int orderPrice)
+    public int EstimateShippingPrice(int orderPrice)
     {
         return CalculateShippingPrice(orderPrice);
     }

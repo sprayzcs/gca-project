@@ -25,11 +25,19 @@ public class ShippingController : BaseController
         return Result(await _shippingService.GetShipmentByIdAsync(shipmentId, cancellationToken));
     }
 
+    /// <summary>
+    ///     Estimates the price of a shipment by the overall order price.
+    /// </summary>
+    /// <param name="orderAmount">Price of the order</param>
+    /// <remarks>
+    ///     Possible errors thrown by this endpoint:
+    ///     - none
+    /// </remarks>
     [HttpGet("estimate/{orderAmount:int}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<int>))]
-    public async Task<IActionResult> GetShippingEstimate(int orderAmount)
+    public IActionResult GetShippingEstimate(int orderAmount)
     {
-        return Result(await _shippingService.EstimateShippingPriceAsync(orderAmount));
+        return Result(_shippingService.EstimateShippingPrice(orderAmount));
     }
 
     [HttpPost]
