@@ -34,7 +34,7 @@ public class CartController : BaseController
     {
         return Result(await _cartService.GetCart(cartId, cancellationToken));
     }
-
+    
     /// <summary>
     ///     Loads the item count of a provided cart
     /// </summary>
@@ -50,7 +50,7 @@ public class CartController : BaseController
     {
         return Result(await _cartService.GetCartItemCount(cartId, cancellationToken));
     }
-
+    
     /// <summary>
     ///     Creates a new, empty cart
     /// </summary>
@@ -64,7 +64,7 @@ public class CartController : BaseController
     {
         return Result(await _cartService.CreateCart(cancellationToken));
     }
-
+    
     /// <summary>
     ///     Adds a single item to a cart
     /// </summary>
@@ -84,7 +84,7 @@ public class CartController : BaseController
     {
         return Result(await _cartService.AddItemToCart(cartId, productId, cancellationToken));
     }
-
+    
     /// <summary>
     ///     Removes a single item from a cart
     /// </summary>
@@ -105,7 +105,7 @@ public class CartController : BaseController
     {
         return Result(await _cartService.RemoveItemFromCart(cartId, productId, cancellationToken));
     }
-
+    
     /// <summary>
     ///     Updates the cart as a whole. It is possible to put (or remove) multiple items in the cart with one call.
     ///     The active state can only be changed by other internal services

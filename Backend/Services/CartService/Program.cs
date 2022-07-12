@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerWithXML(Assembly.GetExecutingAssembly().GetName().Name);
+builder.Services.AddSwaggerWithXML(Assembly.GetExecutingAssembly().GetName().Name!);
 
 builder.Services.AddDatabaseContext<CartContext>(builder.Configuration["ConnectionString"]);
 builder.Services.AddNotificationHandler();
@@ -49,7 +49,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.AddIdentityMiddleware();
-
 if (!builder.Environment.IsDevelopment())
 {
     app.UseCustomLag();
@@ -58,3 +57,4 @@ if (!builder.Environment.IsDevelopment())
 app.MapControllers();
 
 app.Run();
+
