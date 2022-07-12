@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using System.Reflection;
+using Shared;
 using Shared.Data;
 using ShippingService.Data;
 using ShippingService.Infrastructure;
@@ -12,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerWithXML(Assembly.GetExecutingAssembly().GetName().Name!);
 
 builder.Services.AddNotificationHandler();
 builder.Services.AddDatabaseContext<ShipmentContext>(builder.Configuration["ConnectionString"]);
