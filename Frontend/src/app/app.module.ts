@@ -33,6 +33,7 @@ import { NgxsModule } from '@ngxs/store';
 import { CartState } from './store/cart.state';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,7 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
     NgxsModule.forRoot([
       CartState
     ]),
-    NgxsLoggerPluginModule.forRoot(),
+    NgxsLoggerPluginModule.forRoot({disabled: environment.production}),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NbThemeModule.forRoot({name: 'light'}),
     NbToastrModule.forRoot(),

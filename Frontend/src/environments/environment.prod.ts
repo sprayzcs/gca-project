@@ -1,9 +1,9 @@
 export const environment = {
   production: true,
   services: {
-    catalog: 'https://???:5001',
-    shipping: 'https://???:6001',
-    cart: 'https://???:7001',
-    checkout: 'https://???:8001',
+    catalog: window["env"].CATALOG_URL,
+    shipping: window["env"].SHIPPING_URL,
+    cart: window["env"].CART_URL,
+    checkout: window["env"].CHECKOUT_URL,
   }
 };
