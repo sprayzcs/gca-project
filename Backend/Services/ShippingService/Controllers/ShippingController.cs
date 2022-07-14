@@ -18,18 +18,18 @@ public class ShippingController : BaseController
         _shippingService = shippingService;
     }
 
-    [HttpGet("{orderId:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
-    public async Task<IActionResult> GetShipping(Guid orderId)
+    [HttpGet("/{shipmentId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<ShipmentDto>))]
+    public async Task<IActionResult> GetShipping(Guid shipmentId, CancellationToken cancellationToken)
     {
-        return Result(await _shippingService.GetShipmentByOrderIdAsync(orderId));
+        return Result(await _shippingService.GetShipmentByIdAsync(shipmentId, cancellationToken));
     }
-    
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
-    public async Task<IActionResult> CreateShipping([FromBody] CreateShipmentDto request)
+    public async Task<IActionResult> CreateShipping([FromBody] CreateShipmentDto request, CancellationToken cancellationToken)
     {
-        return Result(await _shippingService.CreateShipmentForOrderAsync(request.OrderId, request.CartPrice));
+        return Result(await _shippingService.CreateShipmentForOrderAsync(request.OrderId, request.CartPrice, cancellationToken));
     }
-    
+
 }

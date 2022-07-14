@@ -18,6 +18,7 @@ builder.Services.AddNotificationHandler();
 builder.Services.AddDatabaseContext<ShipmentContext>(builder.Configuration["ConnectionString"]);
 builder.Services.AddSecurityServices(builder.Configuration);
 builder.Services.AddHttpClients(builder.Configuration.GetSection("Services"));
+builder.Services.AddDefaultCors(builder.Configuration);
 builder.Logging.AddSeq(builder.Configuration["Seq"]);
 
 builder.Services.AddAutoMapper(config =>
@@ -33,11 +34,10 @@ var app = builder.Build();
 await app.MigrateDbContext<ShipmentContext>();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseCors("cors");
 
 app.UseHttpsRedirection();
 

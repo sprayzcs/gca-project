@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ProductModel } from 'src/app/util/models/catalog/product.model';
 
 @Component({
   selector: 'app-item-list',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ItemListComponent implements OnInit {
 
+  @Input() products: ProductModel[] = [];
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  getSummedPrice(): number {
+    return this.products.map(p => p.price).reduce((prev, current) => prev + current, 0);
   }
 
 }

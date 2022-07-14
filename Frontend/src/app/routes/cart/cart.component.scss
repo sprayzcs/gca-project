@@ -1,9 +1,13 @@
 .wrapper {
     width: 60%;
+    height: 100%;
     margin: 0 auto;
     
+    .spinner {
+            height: 100%;
+        }
     .right-buttons {
-            width: 100%;
+        width: 100%;
             display: flex;
             justify-content: center;
             gap: 0.5rem;

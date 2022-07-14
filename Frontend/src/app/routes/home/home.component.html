@@ -1,3 +1,9 @@
-<app-product-card></app-product-card>
-<app-product-card></app-product-card>
-<app-product-card></app-product-card>
+<div *ngIf="loading" [nbSpinner]="true" class="spinner"></div>
+<div *ngIf="catalog | async; let products" class="product-wrapper">
+    <div *ngIf="products && products.length != 0;else noProducts">
+        <app-product-card *ngFor="let product of products" [product]="product"></app-product-card>
+    </div>
+    <ng-template #noProducts>
+        Keine Produkte vorhanden
+    </ng-template>
+</div>

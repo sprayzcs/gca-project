@@ -6,29 +6,39 @@ using Shared.Data;
 
 namespace CatalogService.Controllers;
 
-[Route("/catalog/[action]")]
+[ApiController]
+[Route("")]
 public class CatalogController : BaseController
 {
     private readonly IProductService _service;
 
-    public CatalogController(INotificationHandler notificationHandler, IProductService service) : base(notificationHandler)
+    public CatalogController(INotificationHandler notificationHandler, IProductService service) : base(
+        notificationHandler)
     {
         _service = service;
     }
 
     [HttpGet]
-    [Route("/")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ICollection<ProductDto>))]
-    public async Task<IActionResult> GetItems()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<List<ProductDto>>))]
+    public async Task<IActionResult> GetProducts(CancellationToken cancellationToken)
     {
-        return Result(await _service.GetProducts());
+        return Result(await _service.GetProducts(cancellationToken));
+    }
+
+    [HttpGet("/list")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<List<ProductDto>>))]
+    public async Task<IActionResult> GetProductsByIds([FromQuery] IEnumerable<Guid> productIds,
+        CancellationToken cancellationToken)
+    {
+        return Result(await _service.GetProductsByIdsAsync(productIds, cancellationToken));
     }
 
     [HttpGet]
-    [Route("/{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
-    public async Task<IActionResult> GetItem([FromRoute] Guid id)
+    [Route("/{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<ProductDto>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ResponseModel))]
+    public async Task<IActionResult> GetProduct([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        return Result(await _service.GetProduct(id));
+        return Result(await _service.GetProduct(id, cancellationToken));
     }
 }

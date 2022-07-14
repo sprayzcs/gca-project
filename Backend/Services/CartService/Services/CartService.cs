@@ -3,42 +3,59 @@ using CartService.Data;
 using CartService.Infrastructure;
 using Shared;
 using Shared.Data;
+using Shared.Data.Cart;
 using Shared.Infrastructure;
+using Shared.Security;
 
 namespace CartService.Services;
 
 public class CartService : ICartService
 {
     private readonly ICartRepository _repository;
+    private readonly ICartProductRepository _cartProductRepository;
+    private readonly INotificationHandler _notificationHandler;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ISecuredMethodService _securedMethodService;
 
-    public CartService(ICartRepository cartRepository, IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+    public CartService(ICartRepository cartRepository,
+                       ICartProductRepository cartProductRepository,
+                       INotificationHandler notificationHandler,
+                       IUnitOfWork unitOfWork,
+                       IMapper mapper,
+                       ISecuredMethodService securedMethodService)
     {
         _repository = cartRepository;
+        _cartProductRepository = cartProductRepository;
+        _notificationHandler = notificationHandler;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
-        _httpContextAccessor = httpContextAccessor;
+        _securedMethodService = securedMethodService;
     }
 
-    public async Task<CartDto> GetCart()
+    public async Task<CartDto> GetCart(Guid cartId, CancellationToken cancellationToken)
     {
-        var cart = await GetCartFromSession();
+        var cart = await _repository.GetByIdAsync(cartId, cancellationToken);
 
-        if (cart != null)
+        if (cart == null)
         {
-            return _mapper.Map<CartDto>(cart);
+            _notificationHandler.RaiseError(GenericErrorCodes.ObjectNotFound);
+            return new();
         }
 
-        cart = new Cart(Guid.NewGuid());
+        return _mapper.Map<CartDto>(cart);
+    }
 
-        cart = await _repository.AddAsync(cart);
+    public async Task<CartDto> CreateCart(CancellationToken cancellationToken)
+    {
+        var cart = new Cart(Guid.NewGuid())
+        {
+            Active = true
+        };
 
-        // Set data to session to prevent session reload on every api call (see https://stackoverflow.com/a/57333280/9063611)
-        _httpContextAccessor.HttpContext!.Session.Set("cartId", cart.Id.ToByteArray());
+        await _repository.AddAsync(cart, cancellationToken);
 
-        if (!await _unitOfWork.CommitAsync())
+        if (!await _unitOfWork.CommitAsync(cancellationToken))
         {
             return new();
         }
@@ -46,18 +63,154 @@ public class CartService : ICartService
         return _mapper.Map<CartDto>(cart);
     }
 
-    private async Task<Cart?> GetCartFromSession()
+    public async Task<CartDto> AddItemToCart(Guid cartId, Guid productId, CancellationToken cancellationToken)
     {
-        byte[]? sessionCartId = _httpContextAccessor.HttpContext!.Session.Get("cartId");
+        Cart? cart = await _repository.GetByIdAsync(cartId, cancellationToken);
 
-        Cart? cart = null;
-
-        if (sessionCartId != null)
+        if (cart == null)
         {
-            Guid cartId = new Guid(sessionCartId);
-            cart = await _repository.GetByIdAsync(cartId);
+            _notificationHandler.RaiseError(GenericErrorCodes.ObjectNotFound);
+            return new();
         }
 
-        return cart;
+        if (!cart.Active)
+        {
+            _notificationHandler.RaiseError(CartErrors.CartDeactivated);
+            return new();
+        }
+
+        if (cart.Products.Any(p => p.ProductId == productId))
+        {
+            _notificationHandler.RaiseError(CartErrors.ProductAlreadyInCart);
+            return new();
+        }
+
+        var cartProduct = new CartProduct(Guid.NewGuid())
+        {
+            ProductId = productId,
+            Cart = cart
+        };
+
+        await _cartProductRepository.AddAsync(cartProduct, cancellationToken);
+        cart.Products.Add(cartProduct);
+
+        if (!await _unitOfWork.CommitAsync(cancellationToken))
+        {
+            return new();
+        }
+
+        return _mapper.Map<CartDto>(cart);
+    }
+
+    public async Task<CartDto> RemoveItemFromCart(Guid cartId, Guid productId, CancellationToken cancellationToken)
+    {
+        Cart? cart = await _repository.GetByIdAsync(cartId, cancellationToken);
+
+        if (cart == null)
+        {
+            _notificationHandler.RaiseError(GenericErrorCodes.ObjectNotFound);
+            return new();
+        }
+
+        if (!cart.Active)
+        {
+            _notificationHandler.RaiseError(CartErrors.CartDeactivated);
+            return new();
+        }
+
+        if (!cart.Products.Any(p => p.ProductId == productId))
+        {
+            _notificationHandler.RaiseError(CartErrors.ProductNotInCart);
+            return new();
+        }
+
+        CartProduct cartProduct = cart.Products.Where(p => p.ProductId == productId).First();
+        cart.Products.Remove(cartProduct);
+        _cartProductRepository.Remove(cartProduct);
+
+        if (!await _unitOfWork.CommitAsync(cancellationToken))
+        {
+            return new();
+        }
+
+        return _mapper.Map<CartDto>(cart);
+    }
+
+    public async Task<CartDto> UpdateCart(Guid cartId, UpdateCartDto cartDto, CancellationToken cancellationToken)
+    {
+        Cart? cart = await _repository.GetByIdAsync(cartId, cancellationToken);
+
+        if (cart == null)
+        {
+            _notificationHandler.RaiseError(GenericErrorCodes.ObjectNotFound);
+            return new();
+        }
+
+        if (cartDto == null)
+        {
+            _notificationHandler.RaiseError(CartErrors.CartDtoNull);
+            return new();
+        }
+
+        if (!cart.Active)
+        {
+            _notificationHandler.RaiseError(CartErrors.CartDeactivated);
+            return new();
+        }
+
+        if (cartDto.ProductIds != null)
+        {
+            var cartProducts = new List<CartProduct>(cart.Products);
+            var productIdsToSet = cartDto.ProductIds;
+
+            cart.Products.Clear();
+            foreach (Guid productId in productIdsToSet)
+            {
+                var cartProduct = cartProducts.Where(p => p.ProductId == productId).FirstOrDefault();
+                if (cartProduct != null)
+                {
+                    cart.Products.Add(cartProduct);
+                }
+                else
+                {
+                    cartProduct = new CartProduct(Guid.NewGuid())
+                    {
+                        ProductId = productId
+                    };
+                    await _cartProductRepository.AddAsync(cartProduct, cancellationToken);
+                    cart.Products.Add(cartProduct);
+                }
+            }
+        }
+
+        if (cartDto.Active != null)
+        {
+            if (!_securedMethodService.CanAccess())
+            {
+                _notificationHandler.RaiseError(GenericErrorCodes.InsufficientPermissions);
+                return new();
+            }
+
+            cart.Active = cartDto.Active.Value;
+        }
+
+        if (!await _unitOfWork.CommitAsync(false, cancellationToken))
+        {
+            return new();
+        }
+
+        return _mapper.Map<CartDto>(cart);
+    }
+
+    public async Task<int> GetCartItemCount(Guid cartId, CancellationToken cancellationToken)
+    {
+        Cart? cart = await _repository.GetByIdAsync(cartId, cancellationToken);
+        if (cart == null)
+        {
+            _notificationHandler.RaiseError(GenericErrorCodes.ObjectNotFound);
+            return new();
+        }
+
+        return cart.Products.Count;
     }
 }

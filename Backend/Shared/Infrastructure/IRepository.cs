@@ -2,17 +2,17 @@
 
 public interface IRepository<TEntity> : IDisposable where TEntity : class
 {
-    Task<TEntity> AddAsync(TEntity entity);
+    Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default);
 
     IQueryable<TEntity> GetAll();
 
     IQueryable<TEntity> GetAllNoTracking();
 
-    Task<TEntity?> GetByIdAsync(Guid id);
+    Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-    Task RemoveAsync(Guid id);
+    Task RemoveAsync(Guid id, CancellationToken cancellationToken);
 
-    Task<TEntity> UpdateAsync(TEntity entity);
+    TEntity Update(TEntity entity);
 
     void Remove(TEntity entity);
 }

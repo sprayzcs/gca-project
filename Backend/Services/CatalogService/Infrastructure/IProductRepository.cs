@@ -6,4 +6,5 @@ namespace CatalogService.Infrastructure;
 
 public interface IProductRepository : IRepository<Product>
 {
+    IQueryable<Product> GetByIdAsQueryable(Guid productId);
 }

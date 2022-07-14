@@ -4,6 +4,7 @@ namespace ShippingService.Services;
 
 public interface IShippingService
 {
-    Task<ShipmentDto> CreateShipmentForOrderAsync(Guid orderId, int orderPrice);
-    Task<ShipmentDto> GetShipmentByOrderIdAsync(Guid orderId);
+    Task<ShipmentDto> CreateShipmentForOrderAsync(Guid orderId, int orderPrice, CancellationToken cancellationToken);
+
+    Task<ShipmentDto> GetShipmentByIdAsync(Guid shipmentId, CancellationToken cancellationToken);
 }

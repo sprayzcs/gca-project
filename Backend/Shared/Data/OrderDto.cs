@@ -22,9 +22,9 @@ public class OrderDto
 
     public string CreditCardNumber { get; set; } = string.Empty;
 
-    public DateOnly CreditCardExpiryDate { get; set; }
+    public DateTimeOffset CreditCardExpiryDate { get; set; }
 
-    public Guid CardId { get; set; }
+    public Guid CartId { get; set; }
 
     public Guid? ShipmentId { get; set; }
 }
