@@ -34,6 +34,7 @@ import { CartState } from './store/cart.state';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { environment } from 'src/environments/environment';
+import { CheckoutState } from './store/checkout.state';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { environment } from 'src/environments/environment';
     ReactiveValidationModule,
     HttpClientModule,
     NgxsModule.forRoot([
-      CartState
+      CartState,
+      CheckoutState,
     ]),
     NgxsLoggerPluginModule.forRoot({disabled: environment.production}),
     NgxsReduxDevtoolsPluginModule.forRoot(),

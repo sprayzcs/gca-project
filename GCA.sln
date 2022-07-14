@@ -11,6 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{4E0D5D7A
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{8C8655B5-E539-4B31-A4F1-EB4A553224F4}"
+	ProjectSection(SolutionItems) = preProject
+		Backend\Directory.build.props = Backend\Directory.build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{449A573B-DF76-4AB2-B2FE-2E29313A030E}"
 EndProject

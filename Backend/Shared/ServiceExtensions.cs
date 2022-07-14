@@ -102,4 +102,17 @@ public static class ServiceExtensions
 
         return services;
     }
+
+    /// <param name="fileName">Assembly.GetExecutingAssembly().GetName().Name</param>
+    public static IServiceCollection AddSwaggerWithXML(this IServiceCollection services, String fileName)
+    {
+        services.AddSwaggerGen(c =>
+        {
+            var xmlFile = $"{fileName}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            c.IncludeXmlComments(xmlPath);
+        });
+
+        return services;
+    }
 }
