@@ -1,9 +1,13 @@
 # YEET https://github.com/GaetanoPiazzolla/env-frontend/blob/master/angular-env/Dockerfile
 FROM node:18-alpine as build
 WORKDIR /app
-COPY ./src /app/src/
-COPY *.* /app/
-RUN npm ci --legacy-peer-deps -f && npm run build
+
+COPY package-lock.json .
+COPY package.json .
+RUN npm ci --legacy-peer-deps -f
+
+COPY . .
+RUN npm run build
 
 FROM nginx:1.15
 COPY --from=build /app/dist/build/ /usr/share/nginx/html
