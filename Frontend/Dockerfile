@@ -2,11 +2,11 @@
 FROM node:18-alpine as build
 WORKDIR /app
 
-COPY package-lock.json .
-COPY package.json .
+COPY Frontend/package-lock.json .
+COPY Frontend/package.json .
 RUN npm ci --legacy-peer-deps -f
 
-COPY . .
+COPY Frontend .
 RUN npm run build
 
 FROM nginx:1.15
