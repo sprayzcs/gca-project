@@ -4,6 +4,7 @@ metadata:
   name: cart-deployment
   namespace: gca
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: cart-deployment

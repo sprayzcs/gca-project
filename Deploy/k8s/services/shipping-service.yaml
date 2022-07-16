@@ -4,6 +4,7 @@ metadata:
   name: shipping-deployment
   namespace: gca
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: shipping-deployment

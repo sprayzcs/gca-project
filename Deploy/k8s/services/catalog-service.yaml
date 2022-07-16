@@ -4,6 +4,7 @@ metadata:
   name: catalog-deployment
   namespace: gca
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: catalog-deployment

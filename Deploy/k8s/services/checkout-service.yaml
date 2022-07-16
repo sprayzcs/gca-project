@@ -4,6 +4,7 @@ metadata:
   name: checkout-deployment
   namespace: gca
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: checkout-deployment
