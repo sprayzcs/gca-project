@@ -17,7 +17,7 @@ spec:
         image: datalust/seq
         resources:
           limits:
-            cpu: "500m"
+            cpu: "100m"
             memory: "128Mi"
         env:
           - name: ACCEPT_EULA
@@ -49,4 +49,5 @@ spec:
   ports:
   - port: 4000
     targetPort: 80
-  type: LoadBalancer
+    nodePort: 30400
+  type: NodePort

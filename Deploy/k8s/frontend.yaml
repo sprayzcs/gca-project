@@ -14,11 +14,33 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: lennartkampshoff/gca-frontend:master
+        image: lennartkampshoff/gca-frontend:k8s
+        imagePullPolicy: Always
         resources:
           limits:
             memory: "128Mi"
-            cpu: "500m"
+            cpu: "100m"
+        env:
+          - name: ENV_CATALOG_URL
+            valueFrom:
+              configMapKeyRef:
+                name: services-config-map
+                key: catalogService
+          - name: ENV_SHIPPING_URL
+            valueFrom:
+              configMapKeyRef:
+                name: services-config-map
+                key: shippingService
+          - name: ENV_CART_URL
+            valueFrom:
+              configMapKeyRef:
+                name: services-config-map
+                key: cartService
+          - name: ENV_CHECKOUT_URL
+            valueFrom:
+              configMapKeyRef:
+                name: services-config-map
+                key: checkoutService
         ports:
         - containerPort: 80
 ---
@@ -33,4 +55,5 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-  type: LoadBalancer
+    nodePort: 30000
+  type: NodePort

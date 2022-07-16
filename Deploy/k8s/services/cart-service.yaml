@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart-deployment
+  namespace: gca
+spec:
+  selector:
+    matchLabels:
+      app: cart-deployment
+  template:
+    metadata:
+      labels:
+        app: cart-deployment
+    spec:
+      containers:
+      - name: cart-deployment
+        image: lennartkampshoff/gca-cart:master
+        imagePullPolicy: Always
+        env:
+          - name: Security__Secret
+            valueFrom:
+              secretKeyRef:
+                name: backend-secrets
+                key: token-secret
+                optional: false
+          - name: Seq
+            value: 'http://seq-logging-data.gca:5341'
+          - name: 'ConnectionString'
+            valueFrom:
+              secretKeyRef:
+                name: connection-strings
+                key: cart
+                optional: false
+          - name: 'Services__Shipping'
+            valueFrom:
+              configMapKeyRef:
+                name: internal-services-config-map
+                key: shippingService
+          - name: 'Services__Catalog'
+            valueFrom:
+              configMapKeyRef:
+                name: internal-services-config-map
+                key: catalogService
+          - name: 'Services__Checkout'
+            valueFrom:
+              configMapKeyRef:
+                name: internal-services-config-map
+                key: checkoutService
+          - name: 'ASPNETCORE_ENVIRONMENT'
+            valueFrom:
+              configMapKeyRef:
+                name: debug
+                key: environment
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart-service
+  namespace: gca
+spec:
+  selector:
+    app: cart-deployment
+  ports:
+  - port: 5000
+    targetPort: 80
+    nodePort: 30700
+  type: NodePort
