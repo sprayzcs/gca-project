@@ -9,6 +9,11 @@
         <td class="name">{{product.name}}</td>
         <td class="price">{{product.price | price}}</td>
     </tr>
+    <tr class="shipping product" *ngIf="shipping > 0">
+        <td></td>
+        <td>Versandkosten</td>
+        <td class="price">{{shipping | price}}</td>
+    </tr>
     <tr class="footer">
         <td></td>
         <td></td>

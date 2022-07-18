@@ -35,6 +35,20 @@ public class ShippingController : BaseController
     }
 
     /// <summary>
+    ///     Estimates the price of a shipment by the overall order price.
+    /// </summary>
+    /// <param name="orderAmount">Price of the order</param>
+    /// <remarks>
+    ///     Possible errors thrown by this endpoint:
+    ///     - none
+    /// </remarks>
+    [HttpGet("estimate/{orderAmount:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<int>))]
+    public IActionResult GetShippingEstimate(int orderAmount)
+    {
+        return Result(_shippingService.EstimateShippingPrice(orderAmount));
+    }
+
     ///     Creates a new Shipment. Generates the price and a tracking number for the parcel.
     /// </summary>
     /// <param name="request">Object with all needed information to process the shipment</param>
