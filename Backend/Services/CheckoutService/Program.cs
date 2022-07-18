@@ -1,4 +1,5 @@
-﻿using CheckoutService.Data;
+﻿using System.Reflection;
+using CheckoutService.Data;
 using CheckoutService.Infrastructure;
 using CheckoutService.Model;
 using CheckoutService.Services;
@@ -12,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerWithXML(Assembly.GetExecutingAssembly().GetName().Name!);
 
 builder.Services.AddDatabaseContext<CheckoutContext>(builder.Configuration["ConnectionString"]);
 builder.Services.AddNotificationHandler();
