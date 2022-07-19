@@ -1,11 +1,15 @@
 <div class="wrapper">
   <div *ngIf="loading || (loadingCart$ | async) || (loadingCheckout$ | async); else cart" [nbSpinner]="true" class="spinner"></div>
   <ng-template #cart>
-    <div class="top-button right-buttons">
-      <button nbButton ghost *ngIf="!isCartEmpty()" (click)="clearCart()">
-        Warenkorb leeren
-      </button>
-      <button nbButton status="primary" routerLink="/">Weiter einkaufen</button>
+    <div class="top-bar">
+      <p *ngIf="!isCartEmpty()">{{cartProducts.length}} Gegenstände im Warenkorb</p>
+
+      <div class="top-button right-buttons">
+        <button nbButton ghost *ngIf="!isCartEmpty()" (click)="clearCart()">
+          Warenkorb leeren
+        </button>
+        <button nbButton status="primary" routerLink="/">Weiter einkaufen</button>
+      </div>
     </div>
     <div *ngIf="isCartEmpty(); else notEmpty">Der Warenkorb ist leer</div>
     <ng-template #notEmpty>
