@@ -9,7 +9,7 @@
     </div>
     <div *ngIf="isCartEmpty(); else notEmpty">Der Warenkorb ist leer</div>
     <ng-template #notEmpty>
-      <app-item-list [products]="cartProducts"></app-item-list>
+      <app-item-list [products]="cartProducts" [shipping]="shippingPrice"></app-item-list>
       <app-contact-form #form *ngIf="cartProducts.length != 0"></app-contact-form>
       <div class="order-button right-buttons">
         <button nbButton status="primary" (click)="order()" [disabled]="loadingCheckout$ | async">Kostenpflichtig bestellen</button>

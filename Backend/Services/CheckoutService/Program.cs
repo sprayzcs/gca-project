@@ -26,6 +26,7 @@ builder.Services.AddAutoMapper(typeof(Order), typeof(OrderDto));
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICheckoutService, CheckoutService.Services.CheckoutService>();
+builder.Services.AddScoped<IShippingService, ShippingService>();
 
 var app = builder.Build();
 
