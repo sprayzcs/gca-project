@@ -2,9 +2,9 @@
 
 public static class CartErrors
 {
-    public const string ProductAlreadyInCart = "PRODUCT_ALREADY_IN_CART";
-    public const string ProductNotInCart = "PRODUCT_NOT_IN_CART";
-    public const string CartEmpty = "CART_EMPTY";
-    public const string CartDtoNull = "CART_DTO_NULL";
-    public const string CartDeactivated = "CART_DEACTIVATED";
+    public const string ProductAlreadyInCart = "Produkt ist bereits im Warenkorb";
+    public const string ProductNotInCart = "Produkt ist nicht im Warenkorb";
+    public const string CartEmpty = "Warenkorb ist leer";
+    public const string CartDtoNull = "Warenkorb ist leer";
+    public const string CartDeactivated = "Warenkorb ist bereits deaktiviert worden";
 }

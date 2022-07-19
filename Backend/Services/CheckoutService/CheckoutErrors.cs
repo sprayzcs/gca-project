@@ -2,9 +2,9 @@
 
 public static class CheckoutErrors
 {
-    public const string CartAlreadyOrdered = "CART_ALREADY_ORDERED";
-    public const string InvalidCart = "INVALID_CART";
-    public const string InvalidProduct = "INVALID_PRODUCT";
-    public const string CouldNotEstimateShipment = "COULD_NOT_ESTIMATE_SHIPMENT";
-    public const string CouldNotDeactivateCart = "COULD_NOT_DEACTIVATE_CART";
+    public const string CartAlreadyOrdered = "Der Warenkorb wurde bereits bestellt";
+    public const string InvalidCart = "Der Warenkorb wurde bereits deaktiviert";
+    public const string InvalidProduct = "Fehler beim Laden der Produkte aus dem Warenkorb";
+    public const string CouldNotEstimateShipment = "Konnte Lieferkosten nicht berrechnen";
+    public const string CouldNotDeactivateCart = "Konnte Warenkorb nicht deaktivieren";
 }
