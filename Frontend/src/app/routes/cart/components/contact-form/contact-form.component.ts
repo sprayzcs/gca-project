@@ -26,7 +26,7 @@ export class ContactFormComponent implements OnInit {
         country: new FormControl<string>('', [Validators.required('Land muss angegeben werden')]),
       }),
       payment: this.formBuilder.group({
-        creditCardNumber: new FormControl<string>('', [Validators.required('Kreditkarten Nummer muss angegeben werden')]),
+        creditCardNumber: new FormControl<string>('', [Validators.required('Kreditkarten Nummer muss angegeben werden'), Validators.pattern('\\d{16}', 'Kreidtkarten Nummer muss genau 16 Zeichen lang sein')]),
         month: new FormControl<number>(null!, [Validators.required('Monat muss angegeben werden')]),
         year: new FormControl<number>(null!, [Validators.required('Jahr muss angegeben werden')]),
         cvv: new FormControl<string>('', [Validators.required('CVV muss angegeben werden'), Validators.pattern('\\d{3}', 'CVV muss eine dreistellige Zahl sein')]),
