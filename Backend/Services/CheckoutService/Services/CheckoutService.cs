@@ -97,6 +97,7 @@ public class CheckoutService : ICheckoutService
         var order = new Order(Guid.NewGuid())
         {
             CartId = createOrderDto.CartId,
+            Email = createOrderDto.Email,
             PaymentInfo = new()
             {
                 CreditCardNumber = createOrderDto.CreditCardNumber,
@@ -111,7 +112,7 @@ public class CheckoutService : ICheckoutService
             },
             Date = DateTimeOffset.UtcNow
         };
-
+ 
         order = await _repository.AddAsync(order);
 
         ResponseModel<ShipmentDto>? shipmentResponseModel = await _shippingClient.PostAsJsonAsync<CreateShipmentDto, ResponseModel<ShipmentDto>>("/", new CreateShipmentDto()

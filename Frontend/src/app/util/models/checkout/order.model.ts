@@ -2,6 +2,8 @@ export type OrderModel = {
     id: string
     date: Date
 
+    email: string
+
     cartId: string
     shipmentId?: string
 

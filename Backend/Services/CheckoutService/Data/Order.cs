@@ -12,6 +12,8 @@ public class Order : Entity
 
     public Guid CartId { get; set; }
 
+    public string Email { get; set; } = string.Empty;
+
     public Guid? ShipmentId { get; set; }
 
     public Address Address { get; set; } = new();
