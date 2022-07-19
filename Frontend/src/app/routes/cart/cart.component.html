@@ -16,7 +16,7 @@
       <app-item-list [products]="cartProducts" [shipping]="shippingPrice"></app-item-list>
       <app-contact-form #form *ngIf="cartProducts.length != 0"></app-contact-form>
       <div class="order-button right-buttons">
-        <button nbButton status="primary" (click)="order()" [disabled]="loadingCheckout$ | async">Kostenpflichtig bestellen</button>
+        <button nbButton status="primary" (click)="order()" [disabled]="(loadingCheckout$ | async) || !form?.isValid">Kostenpflichtig bestellen</button>
       </div>
     </ng-template>
   </ng-template>
