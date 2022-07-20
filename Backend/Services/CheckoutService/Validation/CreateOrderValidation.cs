@@ -9,44 +9,44 @@ public class CreateOrderValidation : AbstractValidator<CreateOrderDto>
     {
         RuleFor(c => c.Email)
             .NotEmpty()
-            .WithErrorCode("ORDER_EMAIL_EMPTY")
+            .WithMessage("E-Mail darf nicht leer sein")
             .EmailAddress()
-            .WithErrorCode("ORDER_EMAIL_WRONG_FORMAT");
+            .WithMessage("E-Mail muss im E-Mail Format sein");
 
         RuleFor(c => c.Street)
             .NotEmpty()
-            .WithErrorCode("ORDER_STREET_EMPTY");
+            .WithMessage("Straße darf nicht leer sein");
 
         RuleFor(c => c.City)
             .NotEmpty()
-            .WithErrorCode("ORDER_CITY_EMPTY");
+            .WithMessage("Stadt darf nicht leer sein");
 
         RuleFor(c => c.Zipcode)
             .NotEmpty()
-            .WithErrorCode("ORDER_ZIPCODE_EMPTY")
+            .WithMessage("Postleitzahl darf nicht leer sein")
             .Matches("\\d{5}")
-            .WithErrorCode("ORDER_ZIPCODE_WRONG_FORMAT");
+            .WithMessage("Postleitzahl muss eine fünfstellige Zahl sein");
 
         RuleFor(c => c.Country)
             .NotEmpty()
-            .WithErrorCode("ORDER_COUNTRY_EMPTY");
+            .WithMessage("Land darf nicht leer sein");
 
         RuleFor(c => c.CreditCardNumber)
             .NotEmpty()
-            .WithErrorCode("ORDER_CREDIT_CARD_NUMBER_EMPTY")
+            .WithMessage("Kreditkartennummer darf nicht leer sein")
             .Length(16)
-            .WithErrorCode("ORDER_CREDIT_CARD_NUMBER_WRONG_LENGTH")
+            .WithMessage("Kreditkartennummer muss 16 Zeichen lang sein")
             .CreditCard()
-            .WithErrorCode("ORDER_CREDIT_CARD_NUMBER_WRONG_FORMAT");
+            .WithMessage("Kreditkartennummer muss im richtigen Format sein");
 
         RuleFor(c => c.CreditCardExpiryDate)
             .NotEmpty()
-            .WithErrorCode("ORDER_CREDIT_CARD_EXPIRY_EMPTY");
+            .WithMessage("Kreditkartenablaufdatum darf nicht leer sein");
 
         RuleFor(c => c.CreditCardVerificationValue)
             .NotEmpty()
-            .WithErrorCode("ORDER_CVV_EMPTY")
+            .WithMessage("CVV darf nicht leer sein")
             .Matches("\\d{3}")
-            .WithErrorCode("ORDER_CVV_WRONG_FORMAT");
+            .WithMessage("CVV muss eine dreistellige Zahl sein");
     }
 }
