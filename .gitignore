@@ -366,3 +366,4 @@ FodyWeavers.xsd
 
 # Visual Paradigm Backups
 *.vpp.bak*
+*.vpp.lck
