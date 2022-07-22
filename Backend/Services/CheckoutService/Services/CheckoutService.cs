@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CheckoutService.Data;
 using CheckoutService.Infrastructure;
+using CheckoutService.Validation;
 using Shared;
 using Shared.Data;
 using Shared.Data.Cart;
@@ -55,6 +56,17 @@ public class CheckoutService : ICheckoutService
 
     public async Task<OrderDto> CreateOrderFromCart(CreateOrderDto createOrderDto)
     {
+        var validation = new CreateOrderValidation().Validate(createOrderDto);
+        if (!validation.IsValid)
+        {
+            foreach (var error in validation.Errors)
+            {
+                _notificationHandler.RaiseError(error.ErrorCode);
+            }
+
+            return new OrderDto();
+        }
+
         var cartId = createOrderDto.CartId;
         if (await _repository.HasCartAlreadyBeenOrdered(cartId))
         {
@@ -137,4 +149,5 @@ public class CheckoutService : ICheckoutService
 
         return _mapper.Map<OrderDto>(order);
     }
+    
 }
