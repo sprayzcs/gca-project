@@ -3,17 +3,25 @@ secrets:
     name: 'connection-strings'
     values:
     - key: catalog
-      value: 'Host=host.minikube.internal;User Id=database;Password=database;Database=catalog;'
+      value: 'Host=db;User Id=database;Password=database;Database=catalog;'
     - key: cart
-      value: 'Host=host.minikube.internal;User Id=database;Password=database;Database=cart;'
+      value: 'Host=db;User Id=database;Password=database;Database=cart;'
     - key: checkout
-      value: 'Host=host.minikube.internal;User Id=database;Password=database;Database=checkout;'
+      value: 'Host=db;User Id=database;Password=database;Database=checkout;'
     - key: shipping
-      value: 'Host=host.minikube.internal;User Id=database;Password=database;Database=shipping;'
+      value: 'Host=db;User Id=database;Password=database;Database=shipping;'
   backendSecrets: 
     name: 'backend-secrets'
     values:
       tokenSecret: '61F7DCB32DDD1E816FBD88EE1772B'
+
+database:
+  name: db
+  image:
+    name: postgres
+    tag: 14
+    pullPolicy: Always
+  port: 5432
 
 services:
   catalog:
@@ -67,7 +75,7 @@ services:
       name: lennartkampshoff/gca-checkout
       tag: master
       pullPolicy: Always
-    replicas: 3
+    replicas: 1
     resourceLimits:
       cpu: "200m"
       memory: "128Mi"
@@ -116,26 +124,29 @@ publicServicesConfig:
   name: 'services-config-map'
   values:
     - name: catalogService
-      value: 'http://localhost:2000'
+      value: 'http://172.30.143.42:30500'
     - name: cartService
-      value: 'http://localhost:2000'
+      value: 'http://172.30.143.42:30700'
     - name: checkoutService
-      value: 'http://localhost:2000'
+      value: 'http://172.30.143.42:30800'
     - name: shippingService
-      value: 'http://localhost:2000'
+      value: 'http://172.30.143.42:30600'
 
 internalServicesConfig:
   name: 'internal-services-config-map'
   values:
     - name: catalogService
-      value: "http://catalog-service:5000"
+      value: "http://catalog-service:80"
       envName: 'Services__Catalog'
     - name: cartService
-      value: "http://cart-service:5000"
+      value: "http://cart-service:80"
       envName: 'Services__Cart'
     - name: checkoutService
-      value: "http://checkout-service:5000"
+      value: "http://checkout-service:80"
       envName: 'Services__Checkout'
     - name: shippingService
-      value: "http://shipping-service:5000"
+      value: "http://shipping-service:80"
       envName: 'Services__Shipping'
+    - name: environment
+      value: 'Development'
+      envName: 'ASPNETCORE_ENVIRONMENT'

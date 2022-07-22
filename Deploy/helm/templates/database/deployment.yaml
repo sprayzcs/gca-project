@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.database.name }}
+  labels: {{- include "helm.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.database.name }}
+  template:
+    metadata:
+      name: {{ .Values.database.name }}
+      labels: 
+        app: {{ .Values.database.name }}
+        {{- include "helm.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Values.database.name }}
+        image: {{ .Values.database.image.name }}:{{ .Values.database.image.tag }}
+        imagePullPolicy: {{ .Values.database.image.pullPolicy }}
+        env:
+        - name: POSTGRES_USER
+          value: database
+        - name: POSTGRES_PASSWORD
+          value: database
+        - name: POSTGRES_DATABASE
+          value: database
+        ports:
+          - name: db
+            containerPort: 5432
