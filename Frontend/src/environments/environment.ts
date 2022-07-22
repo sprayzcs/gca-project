@@ -5,10 +5,10 @@
 export const environment = {
   production: false,
   services: {
-    catalog: 'https://localhost:5001',
-    shipping: 'https://localhost:6001',
-    cart: 'https://localhost:7001',
-    checkout: 'https://localhost:8001',
+    catalog: 'http://172.28.226.178:30500',
+    shipping: 'http://172.28.226.178:30600',
+    cart: 'http://172.28.226.178:30700',
+    checkout: 'http://172.28.226.178:30800',
   }
 };
 

@@ -2,7 +2,7 @@
 
 <ng-template #orderCart>
     <div class="wrapper">
-        <app-item-list [products]="products" [nbSpinner]="loadingCart"></app-item-list>
+        <app-item-list [products]="products" [nbSpinner]="loadingCart" [shipping]="shipment.price"></app-item-list>
         <div class="order-information">
             <div class="details">
                 <h3>Bestelldetails</h3>
@@ -16,7 +16,8 @@
                     </tr>
                     <tr *ngIf="shipmentInitialized && !shipment">
                         <td>Versand</td>
-                        <td>Fehler beim Übertragen der Details an den Versanddienstleister. Bitte melden Sie sich bei dem Support.</td>
+                        <td>Fehler beim Übertragen der Details an den Versanddienstleister. Bitte melden Sie sich bei
+                            dem Support.</td>
                     </tr>
                     <tbody *ngIf="shipmentInitialized && shipment">
                         <tr>
