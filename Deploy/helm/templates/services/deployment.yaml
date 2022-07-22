@@ -1,0 +1,54 @@
+{{- range  $key, $val := .Values.services }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+  labels: {{- include "helm.labels" $ | nindent 4 }}
+spec:
+  replicas: {{ .replicas }}
+  selector:
+    matchLabels:
+      app: {{ .name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .name }}
+        {{- include "helm.labels" $ | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .name }}
+        image: {{ .image.name }}:{{ .image.tag }}
+        imagePullPolicy: {{ .image.pullPolicy }}
+        env:
+          {{- range .backendSecrets }}
+          - name: {{ .envName }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ $.Values.secrets.backendSecrets.name }}
+                key: {{ .name }}
+                optional: false
+          {{- end }}
+          - name: Seq
+            value: 'http://{{ $.Values.seqLogging.services.data }}:{{ $.Values.seqLogging.ports.data }}'
+          - name: ConnectionString
+            valueFrom:
+              secretKeyRef:
+                name: {{ $.Values.secrets.connectionStrings.name }}
+                key: {{ $key }}
+                optional: false
+          {{- range $.Values.internalServicesConfig.values }}
+          - name: {{ .envName }}
+            valueFrom:
+              configMapKeyRef:
+                name: {{ $.Values.internalServicesConfig.name }}
+                key: {{ .name }}
+          {{- end}}
+        resources:
+          limits:
+            cpu: {{ .resourceLimits.cpu }}
+            memory: {{ .resourceLimits.memory }}
+        ports:
+        - name: api
+          containerPort: 80
+---
+{{- end}}

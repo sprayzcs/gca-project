@@ -1,0 +1,16 @@
+{{- range  $key, $val := .Values.services }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+  labels: {{- include "helm.labels" $ | nindent 4 }}
+spec:
+  selector:
+    app: {{ .name }}
+  ports:
+  - port: 80
+    targetPort: api
+    nodePort: {{ .port }}
+  type: NodePort
+---
+{{- end}}
