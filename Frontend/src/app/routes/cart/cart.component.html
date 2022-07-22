@@ -1,18 +1,22 @@
 <div class="wrapper">
   <div *ngIf="loading || (loadingCart$ | async) || (loadingCheckout$ | async); else cart" [nbSpinner]="true" class="spinner"></div>
   <ng-template #cart>
-    <div class="top-button right-buttons">
-      <button nbButton ghost *ngIf="!isCartEmpty()" (click)="clearCart()">
-        Warenkorb leeren
-      </button>
-      <button nbButton status="primary" routerLink="/">Weiter einkaufen</button>
+    <div class="top-bar">
+      <p *ngIf="!isCartEmpty()">{{cartProducts.length}} Gegenstände im Warenkorb</p>
+
+      <div class="top-button right-buttons">
+        <button nbButton ghost *ngIf="!isCartEmpty()" (click)="clearCart()">
+          Warenkorb leeren
+        </button>
+        <button nbButton status="primary" routerLink="/">Weiter einkaufen</button>
+      </div>
     </div>
     <div *ngIf="isCartEmpty(); else notEmpty">Der Warenkorb ist leer</div>
     <ng-template #notEmpty>
       <app-item-list [products]="cartProducts" [shipping]="shippingPrice"></app-item-list>
       <app-contact-form #form *ngIf="cartProducts.length != 0"></app-contact-form>
       <div class="order-button right-buttons">
-        <button nbButton status="primary" (click)="order()" [disabled]="loadingCheckout$ | async">Kostenpflichtig bestellen</button>
+        <button nbButton status="primary" (click)="order()" [disabled]="(loadingCheckout$ | async) || !form?.isValid">Kostenpflichtig bestellen</button>
       </div>
     </ng-template>
   </ng-template>

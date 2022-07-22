@@ -2,5 +2,5 @@
 
 public static class ShippingErrors
 {
-    public const string ShipmentAlreadyExists = "SHIPMENT_ALREADY_EXISTS";
+    public const string ShipmentAlreadyExists = "Lieferung existiert bereits.";
 }
