@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shipping-deployment
+  namespace: gca
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: shipping-deployment
+  template:
+    metadata:
+      labels:
+        app: shipping-deployment
+    spec:
+      containers:
+      - name: shipping-deployment
+        image: lennartkampshoff/gca-shipping:master
+        imagePullPolicy: Always
+        env:
+          - name: Security__Secret
+            valueFrom:
+              secretKeyRef:
+                name: backend-secrets
+                key: token-secret
+                optional: false
+          - name: Seq
+            value: 'http://seq-logging-data.gca:5341'
+          - name: 'ConnectionString'
+            valueFrom:
+              secretKeyRef:
+                name: connection-strings
+                key: shipping
+                optional: false
+          - name: 'Services__Catalog'
+            valueFrom:
+              configMapKeyRef:
+                name: internal-services-config-map
+                key: catalogService
+          - name: 'Services__Cart'
+            valueFrom:
+              configMapKeyRef:
+                name: internal-services-config-map
+                key: cartService
+          - name: 'Services__Checkout'
+            valueFrom:
+              configMapKeyRef:
+                name: internal-services-config-map
+                key: checkoutService
+          - name: 'ASPNETCORE_ENVIRONMENT'
+            valueFrom:
+              configMapKeyRef:
+                name: debug
+                key: environment
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "50m"
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shipping-service
+  namespace: gca
+spec:
+  selector:
+    app: shipping-deployment
+  ports:
+  - port: 5000
+    targetPort: 80
+    nodePort: 30600
+  type: NodePort

@@ -1,0 +1,8 @@
+# 🚨 THIS NEEDS TO BE "PRODUCTION!" ONLY USE "Development" WHEN DEBUGGING LOCAL! 🚨
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debug
+  namespace: gca
+data:
+  environment: "Production"

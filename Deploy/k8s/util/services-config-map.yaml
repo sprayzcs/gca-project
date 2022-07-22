@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: services-config-map
+  namespace: gca
+data:
+  catalogService: http://172.26.74.146:30500
+  shippingService: http://172.26.74.146:30600
+  cartService: http://172.26.74.146:30700
+  checkoutService: http://172.26.74.146:30800
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: internal-services-config-map
+  namespace: gca
+data:
+  catalogService: http://catalog-service.gca:5000
+  shippingService: http://shipping-service.gca:5000
+  cartService: http://cart-service.gca:5000
+  checkoutService: http://checkout-service.gca:5000
+
