@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.frontend.name }}
+  labels: {{- include "helm.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.frontend.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.frontend.name }}
+    spec:
+      containers:
+      - name: {{ .Values.frontend.name }}
+        image: {{ .Values.frontend.image.name }}:{{ .Values.frontend.image.tag }}
+        imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
+        resources:
+          limits:
+            cpu: {{ .Values.frontend.resourceLimits.cpu }}
+            memory: {{ .Values.frontend.resourceLimits.memory }}
+        env:
+          {{ range .Values.frontend.configEnv }}
+          - name: {{ .name }}
+            valueFrom:
+              configMapKeyRef:
+                  name: services-config-map
+                  key: {{ .key }}
+          {{- end}}
+        ports:
+          - name: web
+            containerPort: 80

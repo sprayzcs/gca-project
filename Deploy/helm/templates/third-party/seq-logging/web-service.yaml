@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.seqLogging.services.web }}
+  labels: {{- include "helm.labels" . | nindent 4 }}
+spec:
+  selector:
+    app: {{ .Values.seqLogging.name }}
+  ports:
+  - port: {{ .Values.seqLogging.ports.web }}
+    targetPort: web
+  type: NodePort

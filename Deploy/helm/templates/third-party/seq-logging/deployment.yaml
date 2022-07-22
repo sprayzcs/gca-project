@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.seqLogging.name }}
+  labels: {{- include "helm.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.seqLogging.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.seqLogging.name }}
+    spec:
+      containers:
+      - name: {{ .Values.seqLogging.name }}
+        image: {{ .Values.seqLogging.image.name }}:{{ .Values.seqLogging.image.tag }}
+        imagePullPolicy: {{ .Values.seqLogging.image.pullPolicy }}
+        resources:
+          limits:
+            cpu: {{ .Values.seqLogging.resourceLimits.cpu }}
+            memory: {{ .Values.seqLogging.resourceLimits.memory }}
+        env:
+          - name: ACCEPT_EULA
+            value: 'Y'
+        ports:
+        - name: data
+          containerPort: 5341
+        - name: web
+          containerPort: 80

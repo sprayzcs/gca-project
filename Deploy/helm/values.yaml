@@ -1,0 +1,141 @@
+secrets:
+  connectionStrings:
+    name: 'connection-strings'
+    values:
+    - key: catalog
+      value: 'Host=host.minikube.internal;User Id=database;Password=database;Database=catalog;'
+    - key: cart
+      value: 'Host=host.minikube.internal;User Id=database;Password=database;Database=cart;'
+    - key: checkout
+      value: 'Host=host.minikube.internal;User Id=database;Password=database;Database=checkout;'
+    - key: shipping
+      value: 'Host=host.minikube.internal;User Id=database;Password=database;Database=shipping;'
+  backendSecrets: 
+    name: 'backend-secrets'
+    values:
+      tokenSecret: '61F7DCB32DDD1E816FBD88EE1772B'
+
+services:
+  catalog:
+    name: catalog-service
+    image:
+      name: lennartkampshoff/gca-catalog
+      tag: master
+      pullPolicy: Always
+    replicas: 3
+    resourceLimits:
+      cpu: "200m"
+      memory: "128Mi"
+    backendSecrets:
+      - name: tokenSecret
+        envName: 'Security__Secret'
+    port: 30500
+
+  cart:
+    name: cart-service
+    image:
+      name: lennartkampshoff/gca-cart
+      tag: master
+      pullPolicy: Always
+    replicas: 3
+    resourceLimits:
+      cpu: "200m"
+      memory: "128Mi"
+    backendSecrets:
+      - name: tokenSecret
+        envName: 'Security__Secret'
+    port: 30700
+
+  shipping:
+    name: shipping-service
+    image:
+      name: lennartkampshoff/gca-shipping
+      tag: master
+      pullPolicy: Always
+    replicas: 3
+    resourceLimits:
+      cpu: "200m"
+      memory: "128Mi"
+    backendSecrets:
+      - name: tokenSecret
+        envName: 'Security__Secret'
+    port: 30600
+
+  checkout:
+    name: checkout-service
+    image:
+      name: lennartkampshoff/gca-checkout
+      tag: master
+      pullPolicy: Always
+    replicas: 3
+    resourceLimits:
+      cpu: "200m"
+      memory: "128Mi"
+    backendSecrets:
+      - name: tokenSecret
+        envName: 'Security__Secret'
+    port: 30800
+
+frontend:
+  name: frontend
+  image:
+    name: lennartkampshoff/gca-frontend
+    tag: k8s
+    pullPolicy: Always
+  resourceLimits:
+    cpu: "500m"
+    memory: "128Mi"
+  port: 30000
+  configEnv:
+    - name: ENV_CATALOG_URL
+      key: catalogService
+    - name: ENV_CART_URL
+      key: cartService
+    - name: ENV_CHECKOUT_URL
+      key: checkoutService
+    - name: ENV_SHIPPING_URL
+      key: shippingService
+
+seqLogging:
+  name: seq-logging
+  image:
+    name: datalust/seq
+    tag: latest
+    pullPolicy: Always
+  resourceLimits:
+    cpu: "500m"
+    memory: "128Mi"
+  ports:
+    data: 5341
+    web: 80
+  services:
+    data: seq-logging-data
+    web: seq-logging-web
+
+publicServicesConfig:
+  name: 'services-config-map'
+  values:
+    - name: catalogService
+      value: 'http://localhost:2000'
+    - name: cartService
+      value: 'http://localhost:2000'
+    - name: checkoutService
+      value: 'http://localhost:2000'
+    - name: shippingService
+      value: 'http://localhost:2000'
+
+internalServicesConfig:
+  name: 'internal-services-config-map'
+  values:
+    - name: catalogService
+      value: "http://catalog-service:5000"
+      envName: 'Services__Catalog'
+    - name: cartService
+      value: "http://cart-service:5000"
+      envName: 'Services__Cart'
+    - name: checkoutService
+      value: "http://checkout-service:5000"
+      envName: 'Services__Checkout'
+    - name: shippingService
+      value: "http://shipping-service:5000"
+      envName: 'Services__Shipping'

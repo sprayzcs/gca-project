@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.internalServicesConfig.name }}
+  labels: {{- include "helm.labels" . | nindent 4 }}
+data: {{ range .Values.internalServicesConfig.values }}
+  {{ .name }}: {{ .value | quote }}
+  {{- end}}
