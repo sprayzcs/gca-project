@@ -30,7 +30,9 @@ services:
       name: lennartkampshoff/gca-catalog
       tag: master
       pullPolicy: Always
-    replicas: 3
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUPercrent: 75
     resourceLimits:
       cpu: "200m"
       memory: "128Mi"
@@ -45,7 +47,9 @@ services:
       name: lennartkampshoff/gca-cart
       tag: master
       pullPolicy: Always
-    replicas: 3
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUPercrent: 75
     resourceLimits:
       cpu: "200m"
       memory: "128Mi"
@@ -60,7 +64,9 @@ services:
       name: lennartkampshoff/gca-shipping
       tag: master
       pullPolicy: Always
-    replicas: 3
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUPercrent: 75
     resourceLimits:
       cpu: "200m"
       memory: "128Mi"
@@ -75,7 +81,9 @@ services:
       name: lennartkampshoff/gca-checkout
       tag: master
       pullPolicy: Always
-    replicas: 1
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUPercrent: 75
     resourceLimits:
       cpu: "200m"
       memory: "128Mi"
